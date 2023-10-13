@@ -23,6 +23,7 @@ namespace EduPrac
         public MainWindow()
         {
             InitializeComponent();
+            
         }
     }
 }
