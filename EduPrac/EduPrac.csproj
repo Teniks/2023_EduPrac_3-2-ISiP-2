@@ -50,7 +50,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System" />
+    <Reference Include="System">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\System.dll</HintPath>
+    </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -122,10 +124,12 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\qNegative.png" />
-    <Resource Include="Images\qPositive.png" />
-    <Resource Include="Images\xNegative.png" />
-    <Resource Include="Images\xPositive.png" />
+    <Resource Include="MVVM\Images\nLog.png" />
+    <Resource Include="MVVM\Images\pLog.png" />
+    <Resource Include="MVVM\Images\qNegative.png" />
+    <Resource Include="MVVM\Images\qPositive.png" />
+    <Resource Include="MVVM\Images\xNegative.png" />
+    <Resource Include="MVVM\Images\xPositive.png" />
     <Content Include="LD.mdf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

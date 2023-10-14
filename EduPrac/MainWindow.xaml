@@ -5,56 +5,172 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:EduPrac"
         mc:Ignorable="d"
-        Height="650" Width="500" WindowStyle="None" ResizeMode="NoResize">
+        Height="720" Width="1280" WindowStyle="None" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
     <Window.Background>
         <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
             <GradientStop Color="#FF86AFA7"/>
             <GradientStop Color="#FF2F4F52" Offset="1"/>
         </LinearGradientBrush>
     </Window.Background>
+    <Window.Resources>
+        <!-- Заменяем стандартное оформление кнопки --> 
+        <Style x:Key="CustomButtonMain" TargetType="Button">
+            <!-- Включаем изменение стандартного оформления кнопки и заменяем на свой шаблон -->
+            <Setter Property="OverridesDefaultStyle" Value="True"/>
+            <Setter Property="Background" Value="#2F4F52"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Name="Border" BorderThickness="0" BorderBrush="Black" 
+                                Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                        <!-- Добавляем кнопке события на изменение,
+                        а именно добавление отступов во время нажатия-->
+                        <ControlTemplate.Triggers>
+                            <EventTrigger RoutedEvent="PreviewMouseDown">
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <ThicknessAnimation Storyboard.TargetProperty="Margin"
+                                                            Duration="0:0:0.100" To="2,2,0,0"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                            <EventTrigger RoutedEvent="PreviewMouseUp">
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <ThicknessAnimation Storyboard.TargetProperty="Margin"
+                                Duration="0:0:0.100" To="0"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="40"/>
             <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
         </Grid.RowDefinitions>
-        <Grid Name ="ToolBar" Grid.Row="0">
+        <!-- Возможность перемещения формы при взаимодействии с опред. областью -->
+        <Grid Name ="ToolBar" Background="Transparent" Grid.Row="0" MouseDown="ToolBar_MouseDown">
+            <!-- Добавляем "язычок" -->
             <Polygon Fill="#2F4F52" Opacity="0.5"
-         Points="130, 0,
-                 150, 10,
-                 350, 10,
-                 370, 0"/>
+             Points="420, 0,
+                    450, 25,
+                    850, 25,
+                    870, 0"/>
+            <!-- Добавляем кнопку "Свернуть" -->
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                <Image Name="MinButton" Height="20" Width="20" Margin="10 5 15 10" >
+                <Image Name="MinButton" Height="20"
+                                        Width="20" 
+                                        Margin="10 5 15 10" MouseDown="MinButton_MouseDown" >
                     <Image.Style>
                         <Style TargetType ="{x:Type Image}">
-                            <Setter Property="Source" Value="Images/qNegative.png"/>
+                            <Setter Property="Source"
+                                    Value="MVVM/Images/qNegative.png"/>
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding IsMouseOver, 
                                     ElementName=MinButton}"
-                          Value="True">
-                                    <Setter Property="Source" Value="Images/qPositive.png"/>
+                                    Value="True">
+                                    <Setter Property="Source"
+                                            Value="MVVM/Images/qPositive.png"/>
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
                     </Image.Style>
+                    <!-- Размываем кнопки -->
+                    <Image.Effect>
+                        <BlurEffect Radius="1"/>
+                    </Image.Effect>
                 </Image>
-                <Image Name="CloseButton" Height="20" Width="20" Margin="10 5 15 10" >
+                <!-- Повторяем для "Закрыть" -->
+                <Image Name="CloseButton" Height="20" 
+                                          Width="20" 
+                                          Margin="10 5 15 10" MouseDown="CloseButton_MouseDown" >
                     <Image.Style>
                         <Style TargetType="{x:Type Image}">
-                            <Setter Property="Source" Value="Images/xNegative.png"/>
+                            <Setter Property="Source" 
+                                    Value="MVVM/Images/xNegative.png"/>
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding IsMouseOver,
                                                        ElementName=CloseButton}"
                                              Value="True">
-                                    <Setter Property="Source" Value="Images/xPositive.png"/>
+                                    <Setter Property="Source"
+                                            Value="MVVM/Images/xPositive.png"/>
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
                     </Image.Style>
+                    <Image.Effect>
+                        <BlurEffect Radius="1"/>
+                    </Image.Effect>
                 </Image>
             </StackPanel>
+        </Grid>
+        <!-- Добавляем панель для рабочих кнопок -->
+        <Grid Name="WorkSpace" Background="Transparent" Grid.Row="1" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="70"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid Name="ButtonPanel" Grid.Column="0">
+                <!-- Сама кнопка и визуальное взаимодействие с ней - изменение обводки -->
+                <Border Height="90" Width="60" VerticalAlignment="Top" Margin="5" CornerRadius="2"
+                        BorderThickness="2" Background="Black">
+                    <Border.Style>
+                        <Style TargetType="{x:Type Border}">
+                            <Setter Property="BorderBrush" Value="#2F4F52"/>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="BorderBrush" Value="#FFA1C1C0"/>
+                                </Trigger>
+                                <EventTrigger RoutedEvent="PreviewMouseDown">
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <ColorAnimation Storyboard.TargetProperty="BorderBrush.Color"
+                                                            Duration="0:0:0.100" To="#2F4F52"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </EventTrigger>
+                                <EventTrigger RoutedEvent="PreviewMouseUp">
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <ColorAnimation Storyboard.TargetProperty="BorderBrush.Color"
+                                                            Duration="0:0:0.100" To="#FFA1C1C0"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </EventTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Border.Style>
+                    <!-- Применение ранее созданного шаблона кнопки -->
+                    <Button Style="{StaticResource CustomButtonMain}">
+                        <!-- Иконка кнопки -->
+                        <StackPanel Orientation="Vertical">
+                            <Image Name="LogButton" Height="70" Width="50" Margin="2, 2, 2, 2">
+                                <Image.Style>
+                                    <Style TargetType="{x:Type Image}">
+                                        <Setter Property="Source" Value="MVVM/Images/nLog.png"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsMouseOver,
+                                                                   ElementName=LogButton}"
+                                                         Value="true">
+                                                <Setter Property="Source"
+                                                        Value="MVVM/Images/pLog.png"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Image.Style>
+                            </Image>
+                        </StackPanel>
+                    </Button>
+                </Border>
+            </Grid>
         </Grid>
     </Grid>
 </Window>
