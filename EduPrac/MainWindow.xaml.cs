@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,6 +24,7 @@ namespace EduPrac
         public MainWindow()
         {
             InitializeComponent();
+
             
         }
 
@@ -42,6 +44,27 @@ namespace EduPrac
             {
                 this.DragMove();
             }
+        }
+
+        private void ButtonLog_PreviewMouseUp(object sender, MouseButtonEventArgs e)
+        {
+            
+            MessageBox.Show("Its work", "ALERN");
+        }
+
+        private void ButtonListPerson_PreviewMouseUp(object sender, MouseButtonEventArgs e)
+        {
+            MessageBox.Show("Its work", "ALERN");
+        }
+
+        private void ButtonListCategory_PreviewMouseUp(object sender, MouseButtonEventArgs e)
+        {
+            MessageBox.Show("Its work", "ALERN");
+        }
+
+        private void ButtonCircusArea_PreviewMouseUp(object sender, MouseButtonEventArgs e)
+        {
+            MessageBox.Show("Its work", "ALERN");
         }
     }
 }

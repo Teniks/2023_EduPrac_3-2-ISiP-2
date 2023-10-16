@@ -80,6 +80,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DataBase.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -124,6 +125,12 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="MVVM\Images\pCategory.png" />
+    <Resource Include="MVVM\Images\nCategory.png" />
+    <Resource Include="MVVM\Images\nCircus.png" />
+    <Resource Include="MVVM\Images\pCircus.png" />
+    <Resource Include="MVVM\Images\pPersons.png" />
+    <Resource Include="MVVM\Images\nPersons.png" />
     <Resource Include="MVVM\Images\nLog.png" />
     <Resource Include="MVVM\Images\pLog.png" />
     <Resource Include="MVVM\Images\qNegative.png" />

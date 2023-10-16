@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:EduPrac"
         mc:Ignorable="d"
-        Height="720" Width="1280" WindowStyle="None" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
+        Height="720" Width="1280" WindowStyle="None" WindowStartupLocation="CenterScreen" ResizeMode="CanResize">
     <Window.Background>
         <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
             <GradientStop Color="#FF86AFA7"/>
@@ -13,7 +13,7 @@
         </LinearGradientBrush>
     </Window.Background>
     <Window.Resources>
-        <!-- Заменяем стандартное оформление кнопки --> 
+        <!-- Заменяем стандартное оформление кнопки -->
         <Style x:Key="CustomButtonMain" TargetType="Button">
             <!-- Включаем изменение стандартного оформления кнопки и заменяем на свой шаблон -->
             <Setter Property="OverridesDefaultStyle" Value="True"/>
@@ -59,11 +59,11 @@
         <!-- Возможность перемещения формы при взаимодействии с опред. областью -->
         <Grid Name ="ToolBar" Background="Transparent" Grid.Row="0" MouseDown="ToolBar_MouseDown">
             <!-- Добавляем "язычок" -->
-            <Polygon Fill="#2F4F52" Opacity="0.5"
-             Points="420, 0,
-                    450, 25,
-                    850, 25,
-                    870, 0"/>
+            <Polygon Fill="#2F4F52" Opacity="0.5" HorizontalAlignment="Center" VerticalAlignment="Top"
+             Points="0, 0,
+                    20, 25,
+                    750, 25,
+                    770, 0" Height="20"/>
             <!-- Добавляем кнопку "Свернуть" -->
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                 <Image Name="MinButton" Height="20"
@@ -119,8 +119,15 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <Grid Name="ButtonPanel" Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition Height="70"/>
+                </Grid.RowDefinitions>
                 <!-- Сама кнопка и визуальное взаимодействие с ней - изменение обводки -->
-                <Border Height="90" Width="60" VerticalAlignment="Top" Margin="5" CornerRadius="2"
+                <Border Height="90" Width="60" VerticalAlignment="Center" Margin="5" CornerRadius="2" Grid.Row ="0"
                         BorderThickness="2" Background="Black">
                     <Border.Style>
                         <Style TargetType="{x:Type Border}">
@@ -149,27 +156,162 @@
                         </Style>
                     </Border.Style>
                     <!-- Применение ранее созданного шаблона кнопки -->
-                    <Button Style="{StaticResource CustomButtonMain}">
+                    <Button Name="ButtonLogEmpl" Style="{StaticResource CustomButtonMain}" PreviewMouseUp="ButtonLog_PreviewMouseUp">
                         <!-- Иконка кнопки -->
                         <StackPanel Orientation="Vertical">
                             <Image Name="LogButton" Height="70" Width="50" Margin="2, 2, 2, 2">
                                 <Image.Style>
                                     <Style TargetType="{x:Type Image}">
                                         <Setter Property="Source" Value="MVVM/Images/nLog.png"/>
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding IsMouseOver,
-                                                                   ElementName=LogButton}"
-                                                         Value="true">
-                                                <Setter Property="Source"
-                                                        Value="MVVM/Images/pLog.png"/>
-                                            </DataTrigger>
-                                        </Style.Triggers>
+                                        
                                     </Style>
                                 </Image.Style>
                             </Image>
                         </StackPanel>
                     </Button>
                 </Border>
+                <Border Height="90" Width="60" VerticalAlignment="Center" Margin="5" CornerRadius="2" Grid.Row ="1"
+                                               BorderThickness="2" Background="Black">
+                    <Border.Style>
+                        <Style TargetType="{x:Type Border}">
+                            <Setter Property="BorderBrush" Value="#2F4F52"/>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="BorderBrush" Value="#FFA1C1C0"/>
+                                </Trigger>
+                                <EventTrigger RoutedEvent="PreviewMouseDown">
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <ColorAnimation Storyboard.TargetProperty="BorderBrush.Color"
+                                            Duration="0:0:0.100" To="#2F4F52"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </EventTrigger>
+                                <EventTrigger RoutedEvent="PreviewMouseUp">
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <ColorAnimation Storyboard.TargetProperty="BorderBrush.Color"
+                                            Duration="0:0:0.100" To="#FFA1C1C0"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </EventTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Border.Style>
+                    <!-- Применение ранее созданного шаблона кнопки -->
+                    <Button Name="ButtonListPerson" Style="{StaticResource CustomButtonMain}" PreviewMouseUp="ButtonListPerson_PreviewMouseUp">
+                        <!-- Иконка кнопки -->
+                        <StackPanel Orientation="Vertical">
+                            <Image Name="ListArtistButton" Height="70" Width="50" Margin="2, 2, 2, 2">
+                                <Image.Style>
+                                    <Style TargetType="{x:Type Image}">
+                                        <Setter Property="Source" Value="MVVM/Images/nPersons.png"/>
+                                       
+                                    </Style>
+                                </Image.Style>
+                            </Image>
+                        </StackPanel>
+                    </Button>
+                </Border>
+                <Border Height="90" Width="60" VerticalAlignment="Center" Margin="5" CornerRadius="2" Grid.Row ="2"
+        BorderThickness="2" Background="Black">
+                    <Border.Style>
+                        <Style TargetType="{x:Type Border}">
+                            <Setter Property="BorderBrush" Value="#2F4F52"/>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="BorderBrush" Value="#FFA1C1C0"/>
+                                </Trigger>
+                                <EventTrigger RoutedEvent="PreviewMouseDown">
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <ColorAnimation Storyboard.TargetProperty="BorderBrush.Color"
+                                            Duration="0:0:0.100" To="#2F4F52"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </EventTrigger>
+                                <EventTrigger RoutedEvent="PreviewMouseUp">
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <ColorAnimation Storyboard.TargetProperty="BorderBrush.Color"
+                                            Duration="0:0:0.100" To="#FFA1C1C0"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </EventTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Border.Style>
+                    <!-- Применение ранее созданного шаблона кнопки -->
+                    <Button Name="ButtonListCategory" Style="{StaticResource CustomButtonMain}" PreviewMouseUp="ButtonListCategory_PreviewMouseUp">
+                        <!-- Иконка кнопки -->
+                        <StackPanel Orientation="Vertical">
+                            <Image Name="ListCategoryButton" Height="70" Width="50" Margin="2, 2, 2, 2">
+                                <Image.Style>
+                                    <Style TargetType="{x:Type Image}">
+                                        <Setter Property="Source" Value="MVVM/Images/nCategory.png"/>
+                                        
+                                    </Style>
+                                </Image.Style>
+                            </Image>
+                        </StackPanel>
+                    </Button>
+                </Border>
+                <Border Height="90" Width="60" VerticalAlignment="Center" Margin="5" CornerRadius="2" Grid.Row ="3"
+                                               BorderThickness="2" Background="Black">
+                    <Border.Style>
+                        <Style TargetType="{x:Type Border}">
+                            <Setter Property="BorderBrush" Value="#2F4F52"/>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="BorderBrush" Value="#FFA1C1C0"/>
+                                </Trigger>
+                                <EventTrigger RoutedEvent="PreviewMouseDown">
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <ColorAnimation Storyboard.TargetProperty="BorderBrush.Color"
+                                            Duration="0:0:0.100" To="#2F4F52"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </EventTrigger>
+                                <EventTrigger RoutedEvent="PreviewMouseUp">
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <ColorAnimation Storyboard.TargetProperty="BorderBrush.Color"
+                                            Duration="0:0:0.100" To="#FFA1C1C0"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </EventTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Border.Style>
+                    <!-- Применение ранее созданного шаблона кнопки -->
+                    <Button Name="ButtonCircusArea" Style="{StaticResource CustomButtonMain}" PreviewMouseUp="ButtonCircusArea_PreviewMouseUp">
+                        <!-- Иконка кнопки -->
+                        <StackPanel Orientation="Vertical">
+                            <Image Name="ListAreaButton" Height="70" Width="50" Margin="2, 2, 2, 2">
+                                <Image.Style>
+                                    <Style TargetType="{x:Type Image}">
+                                        <Setter Property="Source" Value="MVVM/Images/nCircus.png"/>
+                                    </Style>
+                                </Image.Style>
+                            </Image>
+                        </StackPanel>
+                    </Button>
+                </Border>
+            </Grid>
+            <Grid Name="WorkSpaceButtons" Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition Height="70" />
+                </Grid.RowDefinitions>
+                <Grid Name="TableButton" Grid.Row="1">
+                    
+                </Grid>
+                <Grid Name="Table" Grid.Row="0">
+                    <DataGrid Name="TableArea" Margin="20">
+                        
+                    </DataGrid>
+                </Grid>
             </Grid>
         </Grid>
     </Grid>
