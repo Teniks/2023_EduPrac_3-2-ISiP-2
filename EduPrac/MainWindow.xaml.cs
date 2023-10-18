@@ -1,18 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace EduPrac
 {
@@ -21,11 +11,13 @@ namespace EduPrac
     /// </summary>
     public partial class MainWindow : Window
     {
+        
+
+        string query;
         public MainWindow()
         {
             InitializeComponent();
 
-            
         }
 
         private void CloseButton_MouseDown(object sender, MouseButtonEventArgs e)
@@ -48,23 +40,77 @@ namespace EduPrac
 
         private void ButtonLog_PreviewMouseUp(object sender, MouseButtonEventArgs e)
         {
-            
-            MessageBox.Show("Its work", "ALERN");
+            query = "SELECT * FROM LogWork";
+            querySQL(query);
         }
 
         private void ButtonListPerson_PreviewMouseUp(object sender, MouseButtonEventArgs e)
         {
-            MessageBox.Show("Its work", "ALERN");
+            query = "SELECT * FROM Artists";
+            querySQL(query);
         }
 
         private void ButtonListCategory_PreviewMouseUp(object sender, MouseButtonEventArgs e)
         {
-            MessageBox.Show("Its work", "ALERN");
+            query = "SELECT * FROM ArtistCategory";
+            querySQL(query);
         }
 
         private void ButtonCircusArea_PreviewMouseUp(object sender, MouseButtonEventArgs e)
         {
-            MessageBox.Show("Its work", "ALERN");
+            query = "SELECT * FROM CircusArea";
+            querySQL(query);
+        }
+
+        private void AddRow_PreviewMouseUp(object sender, MouseButtonEventArgs e)
+        {
+
+        }
+
+        private void DeleteRow_PreviewMouseUp(object sender, MouseButtonEventArgs e)
+        {
+
+        }
+
+        private void CreateDocs_PreviewMouseUp(object sender, MouseButtonEventArgs e)
+                {
+
+                }
+
+        public void querySQL(in string querySQL)
+        {
+            try
+            {
+                DataBase localDB = new DataBase();
+                SqlDataAdapter adapter = new SqlDataAdapter();
+                DataTable DataTable = new DataTable();
+
+                localDB.openConection();
+
+                using (SqlCommand sqlCommand = new SqlCommand(querySQL, localDB.GetSqlConection()))
+                {
+                    DataGridTableArea.Columns.Clear();
+
+                    adapter.SelectCommand = sqlCommand;
+                    adapter.Fill(DataTable);
+
+                    DataGridTableArea.ItemsSource = DataTable.DefaultView;
+                    DataGridTableArea.AutoGenerateColumns = true;
+                    DataGridTableArea.CanUserAddRows = false;
+                    DataGridTableArea.CanUserDeleteRows = false;
+                }
+
+                localDB.closeConection();
+            }
+            catch
+            {
+
+            }
+        }
+
+        private void Settings_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+
         }
     }
 }
