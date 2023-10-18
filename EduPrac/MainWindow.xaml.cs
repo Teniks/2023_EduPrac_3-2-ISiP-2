@@ -34,7 +34,16 @@ namespace EduPrac
         {
             if(e.ChangedButton == MouseButton.Left)
             {
-                this.DragMove();
+                if(this.WindowState != WindowState.Maximized)
+                {
+                    this.DragMove();
+                }
+                else
+                {
+                    this.WindowState = WindowState.Normal;
+                    this.Width = 1280;
+                    this.Height = 720;
+                }
             }
         }
 
@@ -73,9 +82,9 @@ namespace EduPrac
         }
 
         private void CreateDocs_PreviewMouseUp(object sender, MouseButtonEventArgs e)
-                {
+        {
 
-                }
+        }
 
         public void querySQL(in string querySQL)
         {

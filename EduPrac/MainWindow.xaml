@@ -59,13 +59,18 @@
         <!-- Возможность перемещения формы при взаимодействии с опред. областью -->
         <Grid Name ="ToolBar" Background="Transparent" Grid.Row="0" MouseDown="ToolBar_MouseDown">
             <!-- Добавляем "язычок" -->
-            <Polygon Fill="#2F4F52" Opacity="0.5" HorizontalAlignment="Center" VerticalAlignment="Top"
+            <Polygon Fill="#2F4F52" Opacity="0.5" HorizontalAlignment="Right" VerticalAlignment="Top"
              Points="0, 0,
-                    20, 25,
-                    750, 25,
-                    770, 0" Height="20"/>
+                    20, 35,
+                    120, 35,
+                    140, 0" Height="35"/>
+            <Polygon Fill="#2F4F52" Opacity="0.5" HorizontalAlignment="Left" VerticalAlignment="Top"
+                     Points="0, 0,
+                             20, 35,
+                             60, 35,
+                             80, 0" Height="35"/>
             <!-- Добавляем кнопку "Свернуть" -->
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 0 20 0">
                 <Image Name="MinButton" Height="20"
                                         Width="20" 
                                         Margin="10 5 15 10" MouseDown="MinButton_MouseDown" >
@@ -114,7 +119,7 @@
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
                 <Image Name="Settings" Height="30"
                             Width="40" 
-                            Margin="15 5 15 10" MouseDown="Settings_MouseDown" >
+                            Margin="20 5 15 10" MouseDown="Settings_MouseDown" >
                     <Image.Style>
                         <Style TargetType ="{x:Type Image}">
                             <Setter Property="Source"
