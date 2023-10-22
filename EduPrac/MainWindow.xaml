@@ -8,49 +8,10 @@
         Height="720" Width="1280" WindowStyle="None" WindowStartupLocation="CenterScreen" ResizeMode="CanResize">
     <Window.Background>
         <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-            <GradientStop Color="#FF86AFA7"/>
+            <GradientStop Color="#FF86AFAA"/>
             <GradientStop Color="#FF2F4F52" Offset="1"/>
         </LinearGradientBrush>
     </Window.Background>
-    <Window.Resources>
-        <!-- Заменяем стандартное оформление кнопки -->
-        <Style x:Key="CustomButtonMain" TargetType="Button">
-            <!-- Включаем изменение стандартного оформления кнопки и заменяем на свой шаблон -->
-            <Setter Property="OverridesDefaultStyle" Value="True"/>
-            <Setter Property="Background" Value="#2F4F52"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border Name="Border" BorderThickness="0" BorderBrush="Black" 
-                                Background="{TemplateBinding Background}">
-                            <ContentPresenter HorizontalAlignment="Center"
-                                              VerticalAlignment="Center"/>
-                        </Border>
-                        <!-- Добавляем кнопке события на изменение,
-                        а именно добавление отступов во время нажатия-->
-                        <ControlTemplate.Triggers>
-                            <EventTrigger RoutedEvent="PreviewMouseDown">
-                                <BeginStoryboard>
-                                    <Storyboard>
-                                        <ThicknessAnimation Storyboard.TargetProperty="Margin"
-                                                            Duration="0:0:0.100" To="2,2,0,0"/>
-                                    </Storyboard>
-                                </BeginStoryboard>
-                            </EventTrigger>
-                            <EventTrigger RoutedEvent="PreviewMouseUp">
-                                <BeginStoryboard>
-                                    <Storyboard>
-                                        <ThicknessAnimation Storyboard.TargetProperty="Margin"
-                                Duration="0:0:0.100" To="0"/>
-                                    </Storyboard>
-                                </BeginStoryboard>
-                            </EventTrigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="40"/>
@@ -157,33 +118,7 @@
                 </Grid.RowDefinitions>
                 <!-- Сама кнопка и визуальное взаимодействие с ней - изменение обводки -->
                 <Border Height="90" Width="60" VerticalAlignment="Center" Margin="5" CornerRadius="2" Grid.Row ="0"
-                        BorderThickness="2" Background="Black">
-                    <Border.Style>
-                        <Style TargetType="{x:Type Border}">
-                            <Setter Property="BorderBrush" Value="#2F4F52"/>
-                            <Style.Triggers>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="BorderBrush" Value="#FFA1C1C0"/>
-                                </Trigger>
-                                <EventTrigger RoutedEvent="PreviewMouseDown">
-                                    <BeginStoryboard>
-                                        <Storyboard>
-                                            <ColorAnimation Storyboard.TargetProperty="BorderBrush.Color"
-                                                            Duration="0:0:0.100" To="#2F4F52"/>
-                                        </Storyboard>
-                                    </BeginStoryboard>
-                                </EventTrigger>
-                                <EventTrigger RoutedEvent="PreviewMouseUp">
-                                    <BeginStoryboard>
-                                        <Storyboard>
-                                            <ColorAnimation Storyboard.TargetProperty="BorderBrush.Color"
-                                                            Duration="0:0:0.100" To="#FFA1C1C0"/>
-                                        </Storyboard>
-                                    </BeginStoryboard>
-                                </EventTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Border.Style>
+                        BorderThickness="2" Background="Black" Style="{StaticResource CustomButtonMainBorder}">
                     <!-- Применение ранее созданного шаблона кнопки -->
                     <Button Name="ButtonLogEmpl" Style="{StaticResource CustomButtonMain}" PreviewMouseUp="ButtonLog_PreviewMouseUp">
                         <!-- Иконка кнопки -->
@@ -200,35 +135,10 @@
                     </Button>
                 </Border>
                 <Border Height="90" Width="60" VerticalAlignment="Center" Margin="5" CornerRadius="2" Grid.Row ="1"
-                                               BorderThickness="2" Background="Black">
-                    <Border.Style>
-                        <Style TargetType="{x:Type Border}">
-                            <Setter Property="BorderBrush" Value="#2F4F52"/>
-                            <Style.Triggers>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="BorderBrush" Value="#FFA1C1C0"/>
-                                </Trigger>
-                                <EventTrigger RoutedEvent="PreviewMouseDown">
-                                    <BeginStoryboard>
-                                        <Storyboard>
-                                            <ColorAnimation Storyboard.TargetProperty="BorderBrush.Color"
-                                            Duration="0:0:0.100" To="#2F4F52"/>
-                                        </Storyboard>
-                                    </BeginStoryboard>
-                                </EventTrigger>
-                                <EventTrigger RoutedEvent="PreviewMouseUp">
-                                    <BeginStoryboard>
-                                        <Storyboard>
-                                            <ColorAnimation Storyboard.TargetProperty="BorderBrush.Color"
-                                            Duration="0:0:0.100" To="#FFA1C1C0"/>
-                                        </Storyboard>
-                                    </BeginStoryboard>
-                                </EventTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Border.Style>
+                        BorderThickness="2" Background="Black" Style="{StaticResource CustomButtonMainBorder}">
                     <!-- Применение ранее созданного шаблона кнопки -->
-                    <Button Name="ButtonListPerson" Style="{StaticResource CustomButtonMain}" PreviewMouseUp="ButtonListPerson_PreviewMouseUp">
+                    <Button Name="ButtonListPerson" Style="{StaticResource CustomButtonMain}" 
+                            PreviewMouseUp="ButtonListPerson_PreviewMouseUp">
                         <!-- Иконка кнопки -->
                         <StackPanel Orientation="Vertical">
                             <Image Name="ListArtistButton" Height="70" Width="50" Margin="2, 2, 2, 2">
@@ -243,35 +153,10 @@
                     </Button>
                 </Border>
                 <Border Height="90" Width="60" VerticalAlignment="Center" Margin="5" CornerRadius="2" Grid.Row ="2"
-                        BorderThickness="2" Background="Black">
-                    <Border.Style>
-                        <Style TargetType="{x:Type Border}">
-                            <Setter Property="BorderBrush" Value="#2F4F52"/>
-                            <Style.Triggers>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="BorderBrush" Value="#FFA1C1C0"/>
-                                </Trigger>
-                                <EventTrigger RoutedEvent="PreviewMouseDown">
-                                    <BeginStoryboard>
-                                        <Storyboard>
-                                            <ColorAnimation Storyboard.TargetProperty="BorderBrush.Color"
-                                            Duration="0:0:0.100" To="#2F4F52"/>
-                                        </Storyboard>
-                                    </BeginStoryboard>
-                                </EventTrigger>
-                                <EventTrigger RoutedEvent="PreviewMouseUp">
-                                    <BeginStoryboard>
-                                        <Storyboard>
-                                            <ColorAnimation Storyboard.TargetProperty="BorderBrush.Color"
-                                            Duration="0:0:0.100" To="#FFA1C1C0"/>
-                                        </Storyboard>
-                                    </BeginStoryboard>
-                                </EventTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Border.Style>
+                        BorderThickness="2" Background="Black" Style="{StaticResource CustomButtonMainBorder}">
                     <!-- Применение ранее созданного шаблона кнопки -->
-                    <Button Name="ButtonListCategory" Style="{StaticResource CustomButtonMain}" PreviewMouseUp="ButtonListCategory_PreviewMouseUp">
+                    <Button Name="ButtonListCategory" Style="{StaticResource CustomButtonMain}"
+                            PreviewMouseUp="ButtonListCategory_PreviewMouseUp">
                         <!-- Иконка кнопки -->
                         <StackPanel Orientation="Vertical">
                             <Image Name="ListCategoryButton" Height="70" Width="50" Margin="2, 2, 2, 2">
@@ -286,35 +171,11 @@
                     </Button>
                 </Border>
                 <Border Height="90" Width="60" VerticalAlignment="Center" Margin="5" CornerRadius="2" Grid.Row ="3"
-                                               BorderThickness="2" Background="Black">
-                    <Border.Style>
-                        <Style TargetType="{x:Type Border}">
-                            <Setter Property="BorderBrush" Value="#2F4F52"/>
-                            <Style.Triggers>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="BorderBrush" Value="#FFA1C1C0"/>
-                                </Trigger>
-                                <EventTrigger RoutedEvent="PreviewMouseDown">
-                                    <BeginStoryboard>
-                                        <Storyboard>
-                                            <ColorAnimation Storyboard.TargetProperty="BorderBrush.Color"
-                                            Duration="0:0:0.100" To="#2F4F52"/>
-                                        </Storyboard>
-                                    </BeginStoryboard>
-                                </EventTrigger>
-                                <EventTrigger RoutedEvent="PreviewMouseUp">
-                                    <BeginStoryboard>
-                                        <Storyboard>
-                                            <ColorAnimation Storyboard.TargetProperty="BorderBrush.Color"
-                                            Duration="0:0:0.100" To="#FFA1C1C0"/>
-                                        </Storyboard>
-                                    </BeginStoryboard>
-                                </EventTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Border.Style>
+                                               BorderThickness="2" Background="Black" 
+                        Style="{StaticResource CustomButtonMainBorder}">
                     <!-- Применение ранее созданного шаблона кнопки -->
-                    <Button Name="ButtonCircusArea" Style="{StaticResource CustomButtonMain}" PreviewMouseUp="ButtonCircusArea_PreviewMouseUp">
+                    <Button Name="ButtonCircusArea" Style="{StaticResource CustomButtonMain}" 
+                            PreviewMouseUp="ButtonCircusArea_PreviewMouseUp">
                         <!-- Иконка кнопки -->
                         <StackPanel Orientation="Vertical">
                             <Image Name="ListAreaButton" Height="70" Width="50" Margin="2, 2, 2, 2">
@@ -339,36 +200,13 @@
                         <ColumnDefinition/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
-                    <Border Height="50" Width="150" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5 0 5 10" CornerRadius="2" Grid.Row ="3"
-                               BorderThickness="2" Background="Black" Grid.Column="0">
-                        <Border.Style>
-                            <Style TargetType="{x:Type Border}">
-                                <Setter Property="BorderBrush" Value="#2F4F52"/>
-                                <Style.Triggers>
-                                    <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter Property="BorderBrush" Value="#FFA1C1C0"/>
-                                    </Trigger>
-                                    <EventTrigger RoutedEvent="PreviewMouseDown">
-                                        <BeginStoryboard>
-                                            <Storyboard>
-                                                <ColorAnimation Storyboard.TargetProperty="BorderBrush.Color"
-                            Duration="0:0:0.100" To="#2F4F52"/>
-                                            </Storyboard>
-                                        </BeginStoryboard>
-                                    </EventTrigger>
-                                    <EventTrigger RoutedEvent="PreviewMouseUp">
-                                        <BeginStoryboard>
-                                            <Storyboard>
-                                                <ColorAnimation Storyboard.TargetProperty="BorderBrush.Color"
-                            Duration="0:0:0.100" To="#FFA1C1C0"/>
-                                            </Storyboard>
-                                        </BeginStoryboard>
-                                    </EventTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Border.Style>
+                    <Border Height="50" Width="150" VerticalAlignment="Center" HorizontalAlignment="Right" 
+                            Margin="5 0 5 10" CornerRadius="2" Grid.Row ="3"
+                            BorderThickness="2" Background="Black" Grid.Column="0"
+                            Style="{StaticResource CustomButtonMainBorder}">
                         <!-- Применение ранее созданного шаблона кнопки -->
-                        <Button Name="AddRow" Style="{StaticResource CustomButtonMain}" PreviewMouseUp="AddRow_PreviewMouseUp">
+                        <Button Name="AddRow" Style="{StaticResource CustomButtonMain}" 
+                                PreviewMouseUp="AddRow_PreviewMouseUp">
                             <!-- Иконка кнопки -->
                             <StackPanel Orientation="Vertical">
                                 <Image Height="40" Width="50" Margin="2, 2, 2, 2">
@@ -381,36 +219,13 @@
                             </StackPanel>
                         </Button>
                     </Border>
-                    <Border Height="50" Width="150" VerticalAlignment="Center" Margin="5 0 5 10" CornerRadius="2" Grid.Row ="3"
-                            BorderThickness="2" Background="Black" Grid.Column="1">
-                        <Border.Style>
-                            <Style TargetType="{x:Type Border}">
-                                <Setter Property="BorderBrush" Value="#2F4F52"/>
-                                <Style.Triggers>
-                                    <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter Property="BorderBrush" Value="#FFA1C1C0"/>
-                                    </Trigger>
-                                    <EventTrigger RoutedEvent="PreviewMouseDown">
-                                        <BeginStoryboard>
-                                            <Storyboard>
-                                                <ColorAnimation Storyboard.TargetProperty="BorderBrush.Color"
-                                                                Duration="0:0:0.100" To="#2F4F52"/>
-                                            </Storyboard>
-                                        </BeginStoryboard>
-                                    </EventTrigger>
-                                    <EventTrigger RoutedEvent="PreviewMouseUp">
-                                        <BeginStoryboard>
-                                            <Storyboard>
-                                                <ColorAnimation Storyboard.TargetProperty="BorderBrush.Color"
-                                                                Duration="0:0:0.100" To="#FFA1C1C0"/>
-                                            </Storyboard>
-                                        </BeginStoryboard>
-                                    </EventTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Border.Style>
+                    <Border Height="50" Width="150" VerticalAlignment="Center" Margin="5 0 5 10" 
+                            CornerRadius="2" Grid.Row ="3"
+                            BorderThickness="2" Background="Black" Grid.Column="1" 
+                            Style="{StaticResource CustomButtonMainBorder}">
                         <!-- Применение ранее созданного шаблона кнопки -->
-                        <Button Name="DeleteRow" Style="{StaticResource CustomButtonMain}" PreviewMouseUp="DeleteRow_PreviewMouseUp">
+                        <Button Name="DeleteRow" Style="{StaticResource CustomButtonMain}" 
+                                PreviewMouseUp="DeleteRow_PreviewMouseUp">
                             <!-- Иконка кнопки -->
                             <StackPanel Orientation="Vertical">
                                 <Image Height="40" Width="50" Margin="2, 2, 2, 2">
@@ -423,36 +238,12 @@
                             </StackPanel>
                         </Button>
                     </Border>
-                    <Border Height="50" Width="150" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5 0 5 10" CornerRadius="2" Grid.Row ="3"
-                            BorderThickness="2" Background="Black" Grid.Column="2">
-                        <Border.Style>
-                            <Style TargetType="{x:Type Border}">
-                                <Setter Property="BorderBrush" Value="#2F4F52"/>
-                                <Style.Triggers>
-                                    <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter Property="BorderBrush" Value="#FFA1C1C0"/>
-                                    </Trigger>
-                                    <EventTrigger RoutedEvent="PreviewMouseDown">
-                                        <BeginStoryboard>
-                                            <Storyboard>
-                                                <ColorAnimation Storyboard.TargetProperty="BorderBrush.Color"
-                                                                Duration="0:0:0.100" To="#2F4F52"/>
-                                            </Storyboard>
-                                        </BeginStoryboard>
-                                    </EventTrigger>
-                                    <EventTrigger RoutedEvent="PreviewMouseUp">
-                                        <BeginStoryboard>
-                                            <Storyboard>
-                                                <ColorAnimation Storyboard.TargetProperty="BorderBrush.Color"
-                                                                Duration="0:0:0.100" To="#FFA1C1C0"/>
-                                            </Storyboard>
-                                        </BeginStoryboard>
-                                    </EventTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Border.Style>
+                    <Border Height="50" Width="150" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5 0 5 10" 
+                            CornerRadius="2" Grid.Row ="3" BorderThickness="2" Background="Black" Grid.Column="2" 
+                            Style="{StaticResource CustomButtonMainBorder}">
                         <!-- Применение ранее созданного шаблона кнопки -->
-                        <Button Name="CreateDocs" Style="{StaticResource CustomButtonMain}" PreviewMouseUp="CreateDocs_PreviewMouseUp">
+                        <Button Name="CreateDocs" Style="{StaticResource CustomButtonMain}" 
+                                PreviewMouseUp="CreateDocs_PreviewMouseUp">
                             <!-- Иконка кнопки -->
                             <StackPanel Orientation="Vertical">
                                 <Image Height="40" Width="50" Margin="2, 2, 2, 2">
@@ -466,10 +257,24 @@
                         </Button>
                     </Border>
                 </Grid>
-                <Grid Name="Table" Grid.Row="0">
-                    <DataGrid Name="DataGridTableArea" ItemsSource="{Binding}"  Margin="20">
-                        
-                    </DataGrid>
+                <Grid Name="GridTable" Grid.Row="0">
+                    <StackPanel Name="PageStackPanel" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                        <DataGrid Name="DataGridTableArea" ItemsSource="{Binding}"  Margin="20" IsReadOnly="True"/>
+                        <StackPanel Name="TextBoxes">
+                            <TextBox Name="FirstTextBox" VerticalAlignment="Top" HorizontalAlignment="Left" MinHeight="20" MinWidth="300" Margin="20 10 20 10"/>
+                            <TextBox Name="SecondTextBox" VerticalAlignment="Top" HorizontalAlignment="Left" MinHeight="20" MinWidth="300" Margin="20 10 20 10"/>
+                            <TextBox Name="ThirdTextBox" VerticalAlignment="Top" HorizontalAlignment="Left" MinHeight="20" MinWidth="300" Margin="20 10 20 10"/>
+                            <TextBox Name="FourthTextBox" VerticalAlignment="Top" HorizontalAlignment="Left" MinHeight="20" MinWidth="300" Margin="20 10 20 10"/>
+                            <TextBox Name="FifthTextBox" VerticalAlignment="Top" HorizontalAlignment="Left" MinHeight="20" MinWidth="300" Margin="20 10 20 10"/>
+                            <TextBox Name="SixthTextBox" VerticalAlignment="Top" HorizontalAlignment="Left" MinHeight="20" MinWidth="300" Margin="20 10 20 10"/>
+                        </StackPanel>
+                       <Border Name="ButtonBorderSaveRecord" Height="50" Width="150" VerticalAlignment="Bottom" 
+                                HorizontalAlignment="Left" Margin="20" 
+                                CornerRadius="2" BorderThickness="2" Background="Black"  
+                                Style="{StaticResource CustomButtonMainBorder}">
+                            <Button Name="SaveChanges" Style="{StaticResource CustomButtonMain}" PreviewMouseUp="SaveChanges_PreviewMouseUp"/>
+                        </Border>
+                    </StackPanel> 
                 </Grid>
             </Grid>
         </Grid>

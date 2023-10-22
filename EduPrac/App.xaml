@@ -4,6 +4,11 @@
              xmlns:local="clr-namespace:EduPrac"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="MVVM/ModelView/ButtonMainStyle.xaml"/>
+                <ResourceDictionary Source="MVVM/ModelView/DataGridStyle.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>
