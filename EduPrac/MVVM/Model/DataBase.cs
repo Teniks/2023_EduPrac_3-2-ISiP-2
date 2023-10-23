@@ -88,34 +88,44 @@ namespace EduPrac
             }
             catch
             {
-                MessageBox.Show("При обращении к базе данных возникла ошибка");
+                MessageBox.Show("При выводе данных в таблицу из базы данных возникла ошибка");
             }
         }
         public static bool checkIDisExists(in DataGrid dataGrid,in string Nameid,in string nameTable,in string nameValue,in string value)
         {
-            int counter = 1;
+            int counter = 0;
             string querySQL = $"SELECT {Nameid} FROM {nameTable} WHERE {nameValue} = N{value}";
 
             DataBase localDB = new DataBase();
             SqlDataAdapter adapter = new SqlDataAdapter();
             SqlDataReader reader;
 
-            localDB.openConection();
-
-            using (SqlCommand sqlCommand = new SqlCommand(querySQL, localDB.GetSqlConection()))
+            try
             {
-                dataGrid.Visibility = Visibility.Visible;
-                dataGrid.Columns.Clear();
+                    localDB.openConection();
 
-                adapter.SelectCommand = sqlCommand;
-                reader = sqlCommand.ExecuteReader();
-                reader.Read();
-                if (!reader.HasRows)
+                using (SqlCommand sqlCommand = new SqlCommand(querySQL, localDB.GetSqlConection()))
                 {
-                    counter--;
-                    MessageBox.Show("Не найдена запись c таким именем", "БЕДА");
-                }
+                    dataGrid.Visibility = Visibility.Visible;
+                    dataGrid.Columns.Clear();
 
+                    adapter.SelectCommand = sqlCommand;
+                    reader = sqlCommand.ExecuteReader();
+                    reader.Read();
+                    if (!reader.HasRows)
+                    {
+                        MessageBox.Show("Не найдена запись c таким именем", "БЕДА");
+                    }
+                    else
+                    {
+                        counter++;
+                    }
+
+                }
+            }
+            catch
+            {
+                MessageBox.Show("При проверке записи на наличие в базе данных возникла ошибка.");
             }
 
             localDB.closeConection();
@@ -132,26 +142,30 @@ namespace EduPrac
         public static int newID(in string nameTable, in string nameId)
         {
             int newID = 0;
-
-            DataBase localDB = new DataBase();
-            SqlDataAdapter adapter = new SqlDataAdapter();
-
-            localDB.openConection();
-
-            string querySQL = $"SELECT MAX({nameId}) FROM {nameTable}";
-            using (SqlCommand sqlCommand = new SqlCommand(querySQL, localDB.GetSqlConection()))
+            try
             {
-                adapter.SelectCommand = sqlCommand;
-                DataTable dataTable = new DataTable();
+                DataBase localDB = new DataBase();
+                SqlDataAdapter adapter = new SqlDataAdapter();
 
-                adapter.Fill(dataTable);
+                localDB.openConection();
 
-                newID = (int)dataTable.Rows[0][0] + 1;
+                string querySQL = $"SELECT MAX({nameId}) FROM {nameTable}";
+                using (SqlCommand sqlCommand = new SqlCommand(querySQL, localDB.GetSqlConection()))
+                {
+                    adapter.SelectCommand = sqlCommand;
+                    DataTable dataTable = new DataTable();
+
+                    adapter.Fill(dataTable);
+
+                    newID = (int)dataTable.Rows[0][0] + 1;
+                }
+
+                localDB.closeConection();
             }
-
-            localDB.closeConection();
-
-
+            catch
+            {
+                MessageBox.Show("При вычислении ID используемого элемента возникла ошибка. Проверьте правильность данных.");
+            }
             return newID;
         }
 
@@ -161,15 +175,22 @@ namespace EduPrac
         /// <param name="querySQL"></param>
         public static void querySQL(in string querySQL)
         {
-            DataBase localDB = new DataBase();
-            SqlDataAdapter adapter = new SqlDataAdapter();
+            try
+            {
+                DataBase localDB = new DataBase();
+                SqlDataAdapter adapter = new SqlDataAdapter();
 
-            localDB.openConection();
+                localDB.openConection();
 
-            SqlCommand sqlCommand = new SqlCommand(querySQL, localDB.GetSqlConection());
-            sqlCommand.ExecuteNonQuery();
+                SqlCommand sqlCommand = new SqlCommand(querySQL, localDB.GetSqlConection());
+                sqlCommand.ExecuteNonQuery();
 
-            localDB.closeConection();
+                localDB.closeConection();
+            }
+            catch
+            {
+                MessageBox.Show("При запросе к базе данных произошла ошибка. Проверьте правильность отправляемых данных.");
+            }
         }
     }
 }

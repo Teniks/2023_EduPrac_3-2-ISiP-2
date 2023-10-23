@@ -23,12 +23,8 @@ namespace EduPrac
             new string[] { "IdRecordLog", "DateGoingWork", "IdArtist", "IdArea", "EndTime", "LaunchBreak"},
             new string[] { "IdArtist", "IdCategory", "FullNameArtist", "AddressArtist", "YearBirthArtist", "YearEntryArtist", "GenderArtist", "NumberPhoneArtist"},
             new string[] { "IdCategory", "NameCategory"},
-            new string[] { "IdArea", "NameCircusArea"}
+            new string[] { "IdArea", "NameCircusArea", "AddressArea"}
         };
-
-        string[] SpecialWords = { "SELECT", "AS", "FROM", "CROSS", "LEFT", "JOIN", "ON" ,"AND", "INSERT", "INTO", "VALUES"};
-        
-        
 
         string nameTable;
         string Attributs;
@@ -69,9 +65,9 @@ namespace EduPrac
             TextBoxes.Visibility = Visibility.Collapsed;
 
             nameTable = TableData[0][1];
-            query = $"SELECT {TableData[2][2]} AS 'Имя артиста', {TableData[2][3]} AS 'Адрес', {TableData[2][4]} AS 'День рождения'," +
-                    $" {TableData[2][5]} AS 'Дата приема на работу', {TableData[2][6]} AS 'Пол', {TableData[2][7]} AS 'Номер телефона' "+
-                    $" FROM {nameTable}";
+            query = "SELECT FullNameArtist AS 'Имя артиста', ArtistCategory.NameCategory as 'Категория' , AddressArtist AS 'Адрес', YearBirthArtist AS 'День рождения'," +
+                " YearEntryArtist AS 'Дата приема на работу', GenderArtist AS 'Пол', NumberPhoneArtist AS 'Номер телефона' " +
+                "FROM Artists LEFT JOIN ArtistCategory ON Artists.IdCategory = ArtistCategory.IdCategory";
 
             DataBase.conectTableSQL(query, DataGridTableArea);
             Attributs = DataBase.GetAttribut(TableData, 2);
@@ -85,8 +81,7 @@ namespace EduPrac
             TextBoxes.Visibility = Visibility.Collapsed;
 
             nameTable = TableData[0][2];
-            query = $"SELECT {TableData[3][1]} AS 'Категория' "+
-                    $"FROM {nameTable}";
+            query = "SELECT NameCategory AS 'Категория' FROM ArtistCategory";
 
             DataBase.conectTableSQL(query, DataGridTableArea);
             Attributs = DataBase.GetAttribut(TableData, 3);
@@ -100,12 +95,11 @@ namespace EduPrac
             TextBoxes.Visibility = Visibility.Collapsed;
 
             nameTable = TableData[0][3];
-            query = $"SELECT {TableData[4][1]} AS 'Цирковая площадка' " +
-                    $"FROM  {nameTable}";
+            query = "SELECT NameCircusArea AS 'Цирковая площадка', AddressArea AS 'Адрес площадки' FROM  CircusArea";
 
             DataBase.conectTableSQL(query, DataGridTableArea);
             Attributs = DataBase.GetAttribut(TableData, 4);
-            countAttribute = 1;
+            countAttribute = 2;
             idname = TableData[4][0];
         }
 
@@ -126,6 +120,12 @@ namespace EduPrac
             {
                 case 1:
                     SecondTextBox.Visibility = Visibility.Collapsed;
+                    ThirdTextBox.Visibility = Visibility.Collapsed;
+                    FourthTextBox.Visibility = Visibility.Collapsed;
+                    FifthTextBox.Visibility = Visibility.Collapsed;
+                    SixthTextBox.Visibility = Visibility.Collapsed;
+                    break;
+                case 2:
                     ThirdTextBox.Visibility = Visibility.Collapsed;
                     FourthTextBox.Visibility = Visibility.Collapsed;
                     FifthTextBox.Visibility = Visibility.Collapsed;
@@ -157,6 +157,7 @@ namespace EduPrac
                 {
                     return;
                 }
+                
              }
 
             string valuesAttributs = "";
@@ -193,7 +194,10 @@ namespace EduPrac
 
         private void DeleteRow_PreviewMouseUp(object sender, MouseButtonEventArgs e)
         {
-            
+            if(DataGridTableArea.SelectedItem != null)
+            {
+                DataGridTableArea.SelectedValue.ToString();
+            }
         }
 
         private void CreateDocs_PreviewMouseUp(object sender, MouseButtonEventArgs e)
