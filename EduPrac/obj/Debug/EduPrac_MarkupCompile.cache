@@ -10,11 +10,11 @@ none
 false
 DEBUG;TRACE
 C:\Users\Teniks_V\Documents\GitHub\2023_EduPrac_3-2-ISiP-2\EduPrac\App.xaml
-31430265271
-21644008926
-6-2098286970
+31996974605
+2-1747948522
+6763224162
 13-1371159679
-MVVM\View\MainWindow.xaml;MVVM\ModelView\ButtonMainStyle.xaml;MVVM\ModelView\DataGridStyle.xaml;
+data\ResStyles\ButtonMainStyle.xaml;data\ResStyles\DataGridStyle.xaml;data\View\MainWindow.xaml;
 
 False
 

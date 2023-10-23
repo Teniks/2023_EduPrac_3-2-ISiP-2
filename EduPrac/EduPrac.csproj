@@ -73,7 +73,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="MVVM\View\MainWindow.xaml">
+    <Page Include="data\ResStyles\ButtonMainStyle.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="data\ResStyles\DataGridStyle.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="data\View\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -81,21 +89,12 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MVVM\View\MainWindow.xaml.cs">
+    <Compile Include="data\Model\DataBase.cs" />
+    <Compile Include="data\View\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
-      <SubType>Code</SubType>
     </Compile>
-    <Page Include="MVVM\ModelView\ButtonMainStyle.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="MVVM\ModelView\DataGridStyle.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MVVM\Model\DataBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -134,29 +133,27 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="MVVM\View\Images\nSettings.png" />
-    <Resource Include="MVVM\View\Images\pSettings.png" />
-    <Resource Include="MVVM\View\Images\Docs.png" />
-    <Resource Include="MVVM\View\Images\Delete.png" />
-    <Resource Include="MVVM\View\Images\Add.png" />
-    <Resource Include="MVVM\View\Images\nCategory.png" />
-    <Resource Include="MVVM\View\Images\nCircus.png" />
-    <Resource Include="MVVM\View\Images\nPersons.png" />
-    <Resource Include="MVVM\View\Images\nLog.png" />
-    <Resource Include="MVVM\View\Images\qNegative.png" />
-    <Resource Include="MVVM\View\Images\qPositive.png" />
-    <Resource Include="MVVM\View\Images\xNegative.png" />
-    <Resource Include="MVVM\View\Images\xPositive.png" />
-    <Content Include="MVVM\Model\LD.mdf">
+    <Content Include="data\Model\LD.mdf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="MVVM\Model\LD_log.ldf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    <Content Include="data\Model\LD_log.ldf">
       <DependentUpon>LD.mdf</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Resource Include="data\View\Images\Add.png" />
+    <Resource Include="data\View\Images\Delete.png" />
+    <Resource Include="data\View\Images\Docs.png" />
+    <Resource Include="data\View\Images\nCategory.png" />
+    <Resource Include="data\View\Images\nCircus.png" />
+    <Resource Include="data\View\Images\nLog.png" />
+    <Resource Include="data\View\Images\nPersons.png" />
+    <Resource Include="data\View\Images\nSettings.png" />
+    <Resource Include="data\View\Images\pSettings.png" />
+    <Resource Include="data\View\Images\qNegative.png" />
+    <Resource Include="data\View\Images\qPositive.png" />
+    <Resource Include="data\View\Images\xNegative.png" />
+    <Resource Include="data\View\Images\xPositive.png" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Fonts\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
