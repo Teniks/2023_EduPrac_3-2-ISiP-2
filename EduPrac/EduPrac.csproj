@@ -73,7 +73,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="MainWindow.xaml">
+    <Page Include="MVVM\View\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -81,7 +81,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MainWindow.xaml.cs">
+    <Compile Include="MVVM\View\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
@@ -134,30 +134,29 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="MVVM\Images\nSettings.png" />
-    <Resource Include="MVVM\Images\pSettings.png" />
-    <Resource Include="MVVM\Images\Docs.png" />
-    <Resource Include="MVVM\Images\Delete.png" />
-    <Resource Include="MVVM\Images\Add.png" />
-    <Resource Include="MVVM\Images\nCategory.png" />
-    <Resource Include="MVVM\Images\nCircus.png" />
-    <Resource Include="MVVM\Images\nPersons.png" />
-    <Resource Include="MVVM\Images\nLog.png" />
-    <Resource Include="MVVM\Images\qNegative.png" />
-    <Resource Include="MVVM\Images\qPositive.png" />
-    <Resource Include="MVVM\Images\xNegative.png" />
-    <Resource Include="MVVM\Images\xPositive.png" />
-    <Content Include="LD.mdf">
+    <Resource Include="MVVM\View\Images\nSettings.png" />
+    <Resource Include="MVVM\View\Images\pSettings.png" />
+    <Resource Include="MVVM\View\Images\Docs.png" />
+    <Resource Include="MVVM\View\Images\Delete.png" />
+    <Resource Include="MVVM\View\Images\Add.png" />
+    <Resource Include="MVVM\View\Images\nCategory.png" />
+    <Resource Include="MVVM\View\Images\nCircus.png" />
+    <Resource Include="MVVM\View\Images\nPersons.png" />
+    <Resource Include="MVVM\View\Images\nLog.png" />
+    <Resource Include="MVVM\View\Images\qNegative.png" />
+    <Resource Include="MVVM\View\Images\qPositive.png" />
+    <Resource Include="MVVM\View\Images\xNegative.png" />
+    <Resource Include="MVVM\View\Images\xPositive.png" />
+    <Content Include="MVVM\Model\LD.mdf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="LD_log.ldf">
+    <Content Include="MVVM\Model\LD_log.ldf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <DependentUpon>LD.mdf</DependentUpon>
     </Content>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Fonts\" />
-    <Folder Include="MVVM\View\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

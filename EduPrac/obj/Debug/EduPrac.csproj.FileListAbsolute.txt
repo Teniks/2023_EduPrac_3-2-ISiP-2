@@ -11,13 +11,13 @@ C:\Users\Teniks_V\Documents\GitHub\2023_EduPrac_3-2-ISiP-2\EduPrac\obj\Debug\Edu
 C:\Users\Teniks_V\Documents\GitHub\2023_EduPrac_3-2-ISiP-2\EduPrac\obj\Debug\EduPrac.csproj.CoreCompileInputs.cache
 C:\Users\Teniks_V\Documents\GitHub\2023_EduPrac_3-2-ISiP-2\EduPrac\obj\Debug\EduPrac.exe
 C:\Users\Teniks_V\Documents\GitHub\2023_EduPrac_3-2-ISiP-2\EduPrac\obj\Debug\EduPrac.pdb
-C:\Users\Teniks_V\Documents\GitHub\2023_EduPrac_3-2-ISiP-2\EduPrac\obj\Debug\MainWindow.g.cs
 C:\Users\Teniks_V\Documents\GitHub\2023_EduPrac_3-2-ISiP-2\EduPrac\obj\Debug\App.g.cs
-C:\Users\Teniks_V\Documents\GitHub\2023_EduPrac_3-2-ISiP-2\EduPrac\obj\Debug\MainWindow.baml
-C:\Users\Teniks_V\Documents\GitHub\2023_EduPrac_3-2-ISiP-2\EduPrac\bin\Debug\LD.mdf
-C:\Users\Teniks_V\Documents\GitHub\2023_EduPrac_3-2-ISiP-2\EduPrac\bin\Debug\LD_log.ldf
 C:\Users\Teniks_V\Documents\GitHub\2023_EduPrac_3-2-ISiP-2\EduPrac\obj\Debug\MVVM\ModelView\ButtonMainStyle.baml
 C:\Users\Teniks_V\Documents\GitHub\2023_EduPrac_3-2-ISiP-2\EduPrac\obj\Debug\App.baml
 C:\Users\Teniks_V\Documents\GitHub\2023_EduPrac_3-2-ISiP-2\EduPrac\obj\Debug\MVVM\ModelView\DataGridStyle.baml
 C:\Users\Teniks_V\Documents\GitHub\2023_EduPrac_3-2-ISiP-2\EduPrac\bin\Debug\System.dll
 C:\Users\Teniks_V\Documents\GitHub\2023_EduPrac_3-2-ISiP-2\EduPrac\obj\Debug\EduPrac.csproj.CopyComplete
+C:\Users\Teniks_V\Documents\GitHub\2023_EduPrac_3-2-ISiP-2\EduPrac\bin\Debug\MVVM\Model\LD.mdf
+C:\Users\Teniks_V\Documents\GitHub\2023_EduPrac_3-2-ISiP-2\EduPrac\bin\Debug\MVVM\Model\LD_log.ldf
+C:\Users\Teniks_V\Documents\GitHub\2023_EduPrac_3-2-ISiP-2\EduPrac\obj\Debug\MVVM\View\MainWindow.g.cs
+C:\Users\Teniks_V\Documents\GitHub\2023_EduPrac_3-2-ISiP-2\EduPrac\obj\Debug\MVVM\View\MainWindow.baml

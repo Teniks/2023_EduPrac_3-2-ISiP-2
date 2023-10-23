@@ -14,7 +14,7 @@ namespace EduPrac
     internal class DataBase
     {
         SqlConnection sqlConnection = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;
-                                                          AttachDbFilename=C:\Users\Teniks_V\Documents\GitHub\2023_EduPrac_3-2-ISiP-2\EduPrac\LD.mdf;
+                                                          AttachDbFilename=C:\Users\Teniks_V\Documents\GitHub\2023_EduPrac_3-2-ISiP-2\EduPrac\MVVM\Model\LD.mdf;
                                                           Integrated Security=True");
 
         public void openConection()
@@ -38,7 +38,6 @@ namespace EduPrac
             return sqlConnection;
         }
 
-        
         public static string GetAttribut(in string[][] Data, in int massAttr)
         {
             string listAttribute;
@@ -91,6 +90,7 @@ namespace EduPrac
                 MessageBox.Show("При выводе данных в таблицу из базы данных возникла ошибка");
             }
         }
+
         public static bool checkIDisExists(in DataGrid dataGrid,in string Nameid,in string nameTable,in string nameValue,in string value)
         {
             int counter = 0;
@@ -139,6 +139,7 @@ namespace EduPrac
                 return true;
             }
         }
+
         public static int newID(in string nameTable, in string nameId)
         {
             int newID = 0;
