@@ -13,6 +13,7 @@ using System.Reflection;
 
 namespace EduPrac
 {
+    //Набор методов передачи сообщений в базу данных под необходимые случаи
     internal class DataBase
     {
         SqlConnection sqlConnection = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;
@@ -108,7 +109,6 @@ namespace EduPrac
 
                 using (SqlCommand sqlCommand = new SqlCommand(querySQL, localDB.GetSqlConection()))
                 {
-                    dataGrid.Visibility = Visibility.Visible;
                     dataGrid.Columns.Clear();
 
                     adapter.SelectCommand = sqlCommand;
@@ -202,7 +202,7 @@ namespace EduPrac
             }
         }
 
-        public static void SearchInTable<T>(T searchSTR, string nameTable ,string[] attributs, DataGrid dataGrid)
+        public static void SearchInTable<T>(in T searchSTR,in string nameTable ,in string[] attributs, in DataGrid dataGrid)
         {
             string query = "";
 
@@ -212,7 +212,7 @@ namespace EduPrac
             }
             conectTableSQL(query, dataGrid);
         }
-        public static void SearchEach<T>(T searchSTR, string[] namesTable, string[] attributs, DataGrid dataGrid)
+        public static void SearchEach<T>(in T searchSTR, in string[] namesTable, in string[] attributs, in DataGrid dataGrid)
         {
             string query = "";
             for(int j = namesTable.Length; j >= 0; j--)
@@ -246,7 +246,6 @@ namespace EduPrac
                     {
                         id = (int)reader[0];
                     }
-
                 }
             }
             catch

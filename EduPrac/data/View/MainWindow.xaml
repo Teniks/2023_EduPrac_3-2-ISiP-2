@@ -359,7 +359,7 @@
                         </TextBlock.Style>
                     </TextBlock>
                     <Grid Name="SettingsPanel" Height="210" Width="210" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="10 0 10 0"
-                          Visibility="Hidden">
+                          Visibility="Visible" MouseLeave="SettingsPanel_MouseLeave">
                         <Polygon Fill="Black" StrokeThickness="3" Stroke="Black"
                                  Points="0, 8,
                                          0, 200,
@@ -379,8 +379,11 @@
                         <Grid Height="190" Width="200" VerticalAlignment="Top" HorizontalAlignment="Left"
                               Margin="0, 10, 0, 10">
                             <StackPanel Orientation="Vertical">
-                                <Button Style="{StaticResource CustomButtonSettings}">
+                                <Button Name="SearchSortBtn" Style="{StaticResource CustomButtonSettings}" MouseDown="SearchSortBtn_MouseDown">
                                     <TextBlock Text="Поиск / Сортировка"/>
+                                </Button>
+                                <Button Name="HumanHours" Style="{StaticResource CustomButtonSettings}">
+                                    <TextBlock Text="Часы на человека" />
                                 </Button>
                             </StackPanel>
                         </Grid>
