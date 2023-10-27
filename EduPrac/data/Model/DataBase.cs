@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows;
 using System.Xml;
+using System.Collections;
+using System.Reflection;
 
 namespace EduPrac
 {
@@ -38,12 +40,12 @@ namespace EduPrac
             return sqlConnection;
         }
 
-        public static string GetAttribut(in string[][] Data, in int massAttr)
+        public static string GetAttribut(in string[][] Data, in int massAttr, bool log = false)
         {
             string listAttribute;
 
             listAttribute = "(";
-            for (int i = 0; i < Data[massAttr].Length; i++)
+            for (int i = log ? 1 : 0 ; i < Data[massAttr].Length; i++)
             {
                 if (i < Data[massAttr].Length - 1)
                 {
@@ -102,7 +104,7 @@ namespace EduPrac
 
             try
             {
-                    localDB.openConection();
+                localDB.openConection();
 
                 using (SqlCommand sqlCommand = new SqlCommand(querySQL, localDB.GetSqlConection()))
                 {
@@ -112,11 +114,7 @@ namespace EduPrac
                     adapter.SelectCommand = sqlCommand;
                     reader = sqlCommand.ExecuteReader();
                     reader.Read();
-                    if (!reader.HasRows)
-                    {
-                        MessageBox.Show("Не найдена запись c таким именем", "БЕДА");
-                    }
-                    else
+                    if (reader.HasRows)
                     {
                         counter++;
                     }
@@ -158,7 +156,16 @@ namespace EduPrac
 
                     adapter.Fill(dataTable);
 
-                    newID = (int)dataTable.Rows[0][0] + 1;
+                    try
+                    {
+                        newID = (int)dataTable.Rows[0][0] + 1;
+                    }
+                    catch
+                    {
+                        newID = 1;
+                    }
+                    
+
                 }
 
                 localDB.closeConection();
@@ -187,11 +194,66 @@ namespace EduPrac
                 sqlCommand.ExecuteNonQuery();
 
                 localDB.closeConection();
+
             }
             catch
             {
-                MessageBox.Show("При запросе к базе данных произошла ошибка. Проверьте правильность отправляемых данных.");
+                MessageBox.Show("При запросе на добавление произошла ошибка. Проверьте правильность отправляемых данных.");
             }
+        }
+
+        public static void SearchInTable<T>(T searchSTR, string nameTable ,string[] attributs, DataGrid dataGrid)
+        {
+            string query = "";
+
+            for (int i = attributs.Length; i >= 0; i--)
+            {
+                query += $"SELECT * FROM {nameTable} WHERE {attributs[i]} = '{searchSTR}'";
+            }
+            conectTableSQL(query, dataGrid);
+        }
+        public static void SearchEach<T>(T searchSTR, string[] namesTable, string[] attributs, DataGrid dataGrid)
+        {
+            string query = "";
+            for(int j = namesTable.Length; j >= 0; j--)
+            {
+                for (int i = attributs.Length; i >= 0; i--)
+                {
+                    query += $"SELECT * FROM {namesTable[j]} WHERE {attributs[i]} = '{searchSTR}' \n";
+                }
+            }
+            conectTableSQL(query, dataGrid);
+        }
+        public static int SearchID(in string Nameid, in string nameTable, in string nameValue, in string value)
+        {
+            int id = -1;
+            string querySQL = $"SELECT {Nameid} FROM {nameTable} WHERE {nameValue} = N{value}";
+
+            DataBase localDB = new DataBase();
+            SqlDataAdapter adapter = new SqlDataAdapter();
+            SqlDataReader reader;
+
+            try
+            {
+                localDB.openConection();
+
+                using (SqlCommand sqlCommand = new SqlCommand(querySQL, localDB.GetSqlConection()))
+                {
+                    adapter.SelectCommand = sqlCommand;
+                    reader = sqlCommand.ExecuteReader();
+                    reader.Read();
+                    if (reader.HasRows)
+                    {
+                        id = (int)reader[0];
+                    }
+
+                }
+            }
+            catch
+            {
+                MessageBox.Show($"При запросе к базе данных произошла ошибка. Проверьте правильность отправляемых данных.");
+            }
+            return id;
         }
     }
 }

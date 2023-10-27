@@ -28,6 +28,8 @@ namespace EduPrac
             new string[] { "IdArea", "NameCircusArea", "AddressArea"}
         };
 
+        string[] rusNameAttributes;
+
         string nameTable;
         string Attributs;
         string idname;
@@ -53,8 +55,9 @@ namespace EduPrac
                     "from LogWork left join Artists cross join CircusArea " +
                     "on LogWork.IdArtist = Artists.IdArtist and LogWork.IdArea = CircusArea.IdArea";
 
+            rusNameAttributes = new string[] { "Вышел", "Полное имя", "Цирковая площадка", "Закончил работу", "Перерыв" };
             DataBase.conectTableSQL(query, DataGridTableArea);
-            Attributs = DataBase.GetAttribut(TableData, 1);
+            Attributs = DataBase.GetAttribut(TableData, 1, true);
             idname = TableData[1][0];
 
         }
@@ -68,6 +71,7 @@ namespace EduPrac
                     " YearEntryArtist AS 'Дата приема на работу', GenderArtist AS 'Пол', NumberPhoneArtist AS 'Номер телефона' " +
                     "FROM Artists LEFT JOIN ArtistCategory ON Artists.IdCategory = ArtistCategory.IdCategory";
 
+            rusNameAttributes = new string[] { "Имя артиста", "Категория", "Адрес", "День рождения", "Дата приема на работу", "Пол", "Номер телефона" };
             DataBase.conectTableSQL(query, DataGridTableArea);
             Attributs = DataBase.GetAttribut(TableData, 2);
             idname = TableData[2][0];
@@ -80,6 +84,7 @@ namespace EduPrac
             nameTable = TableData[0][2];
             query = "SELECT IdCategory AS '№', NameCategory AS 'Категория' FROM ArtistCategory";
 
+            rusNameAttributes = new string[] { "Категория" };
             DataBase.conectTableSQL(query, DataGridTableArea);
             Attributs = DataBase.GetAttribut(TableData, 3);
             idname = TableData[3][0];
@@ -92,6 +97,7 @@ namespace EduPrac
             nameTable = TableData[0][3];
             query = "SELECT IdArea AS '№', NameCircusArea AS 'Цирковая площадка', AddressArea AS 'Адрес площадки' FROM  CircusArea";
 
+            rusNameAttributes = new string[] { "Цирковая площадка", "Адрес площадки" };
             DataBase.conectTableSQL(query, DataGridTableArea);
             Attributs = DataBase.GetAttribut(TableData, 4);
             idname = TableData[4][0];
@@ -109,52 +115,95 @@ namespace EduPrac
         }  
         private void SaveChanges_PreviewMouseUp(object sender, MouseButtonEventArgs e)
         {
-             if(nameTable == TableData[0][1])
-             {
-                if(!DataBase.checkIDisExists(DataGridTableArea, TableData[2][0], TableData[0][1], TableData[2][2], $"'{SecondTextBox}'"))
-                {
-                    return;
-                }
-                
-             }
-
-            string valuesAttributs = "";
-            string[] txtboxes = { FirstTextBox.Text, SecondTextBox.Text, ThirdTextBox.Text, FourthTextBox.Text, FifthTextBox.Text, SixthTextBox.Text };
-
-            for (int i = 0; i < countAttribute; i++)
+            if (AddorDel)
             {
-                if (Char.IsLetter(txtboxes[i].Trim().ToCharArray().ElementAt(0)))
+                switch (nameTable)
                 {
-                    if (i < countAttribute - 1)
-                    {
-                        valuesAttributs += "N'" + txtboxes[i].Trim() + "'" + ",";
-                    }
-                    else
-                    {
-                        valuesAttributs += "N'" + txtboxes[i].Trim() + "'";
-                    }
-                }
-                else
-                {
-                    if (i < countAttribute - 1)
-                    {
-                        valuesAttributs += "'" + txtboxes[i].Trim() + "'" + ",";
-                    }
-                    else
-                    {
-                        valuesAttributs += "'" + txtboxes[i].Trim() + "'";
-                    }
+                    case "Artists":
+                        if (!DataBase.checkIDisExists(DataGridTableArea, TableData[3][0], TableData[0][2], TableData[3][1], $"'{SecondTextBox.Text}'"))
+                        {
+                            MessageBox.Show("Такая категория отсутствует в списках. \n\t Проверьте правильность написания и наличие в списках");
+                            return;
+                        }
+
+                        if (FirstTextBox.Text.Trim() != "" && SecondTextBox.Text.Trim() != "" && ThirdTextBox.Text.Trim() != "" && FourthTextBox.Text.Trim() != "" && FifthTextBox.Text.Trim() != "")
+                        {
+                            DataBase.querySQL(CheckString());
+                        }
+                        else
+                        {
+                            MessageBox.Show("Пропущенные поля(все) не могут быть пустыми");
+                        }
+                        break;
+                    case "LogWork":
+                        if (!DataBase.checkIDisExists(DataGridTableArea, TableData[2][0], TableData[0][1], TableData[2][2], $"'{SecondTextBox.Text}'"))
+                        {
+                            MessageBox.Show("Такое имя отсутствует в списках. \n\t Проверьте правильность написания и наличие в списках");
+                            return;
+                        }
+                        if (!DataBase.checkIDisExists(DataGridTableArea, TableData[4][0], TableData[0][3], TableData[4][1], $"'{ThirdTextBox.Text}'"))
+                        {
+                            MessageBox.Show("Такая площадка отсутствует в списках. \n\t Проверьте правильность написания и наличие в списках");
+                            return;
+                        }
+                        if (FirstTextBox.Text.Trim() != "" && SecondTextBox.Text.Trim() != "")
+                        {
+                            DataBase.querySQL(CheckString());
+                        }
+                        else
+                        {
+                            MessageBox.Show("Пропущенные поля(1-2) не могут быть пустыми");
+                        }
+                        break;
+                    case "CircusArea":
+                        if (FirstTextBox.Text.Trim() != "" && SecondTextBox.Text.Trim() != "")
+                        {
+                            DataBase.querySQL(CheckString());
+                        }
+                        else
+                        {
+                            MessageBox.Show("Пропущенные поля(1-2) не могут быть пустыми");
+                        }
+                        break;
+                    case "ArtistCategory":
+                        if (FirstTextBox.Text.Trim() != "")
+                        {
+                            DataBase.querySQL(CheckString());
+                        }
+                        else
+                        {
+                            MessageBox.Show("Пропущенные поля(все) не могут быть пустыми");
+                        }
+                        break;
                 }
             }
-            string query = $"INSERT INTO {nameTable}{Attributs} VALUES ({DataBase.newID(nameTable, idname)}, {valuesAttributs})";
-            DataBase.querySQL(query);
+            if (!AddorDel)
+            {
+                if (nameTable == TableData[0][1])
+                {
+                    if (DataBase.checkIDisExists(DataGridTableArea, TableData[2][1], TableData[0][1], TableData[1][2], FirstTextBox.Text))
+                    {
+                        MessageBox.Show("Имя используется в другой записи. Таблица Artists");
+                        return;
+                    }
+                }
+                if (nameTable == TableData[0][2])
+                {
+                    if (DataBase.checkIDisExists(DataGridTableArea, TableData[2][1], TableData[0][2], TableData[1][2], FirstTextBox.Text))
+                    {
+                        MessageBox.Show("Категория используется в другой записи. Таблица Artists");
+                        return;
+                    }
+                }
+                string query = $"DELETE FROM {nameTable} WHERE {idname} = {FirstTextBox.Text}";
+                DataBase.querySQL(query);
+            }
         }
 
         private void DeleteRow_PreviewMouseUp(object sender, MouseButtonEventArgs e)
         {
             AddorDel = false;
             ChangesEditVisElementEdit();
-            FifthTextBox.Text = nameTable != null ? "номер записи" : "выберите таблицу";
             AddRowBorder.Visibility = Visibility.Visible;
             DeleteRowBorder.Visibility = Visibility.Collapsed;
             boolButton.Source = new BitmapImage(new Uri(@"Images/Delete.png", UriKind.Relative));
@@ -166,7 +215,9 @@ namespace EduPrac
         }
         private void Settings_MouseDown(object sender, MouseButtonEventArgs e)
         {
-
+            if(SettingsPanel.Visibility == Visibility.Hidden)
+                SettingsPanel.Visibility = Visibility.Visible;
+            else SettingsPanel.Visibility = Visibility.Hidden;
         }
         private void CloseButton_MouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -201,6 +252,14 @@ namespace EduPrac
             DeleteRowBorder.Visibility = Visibility.Visible;
             ButtonBorderSaveChanges.Visibility = Visibility.Collapsed;
             TextBoxes.Visibility = Visibility.Collapsed;
+
+            FirstTxt.Visibility = Visibility.Collapsed;
+            SecondTxt.Visibility = Visibility.Collapsed;
+            ThirdTxt.Visibility = Visibility.Collapsed;
+            FourthTxt.Visibility = Visibility.Collapsed;
+            FifthTxt.Visibility = Visibility.Collapsed;
+            SixthTxt.Visibility = Visibility.Collapsed;
+            SeventhTxt.Visibility = Visibility.Collapsed;
         }
         private void ChangesEditVisElementEdit()
         {
@@ -219,12 +278,12 @@ namespace EduPrac
             switch (nameTable)
             {
                 case "LogWork":
-                    countAttribute = 6;
+                    countAttribute = 5;
                     break;
                 case "Artists":
-                    countAttribute = 6;
+                    countAttribute = 7;
                     break;
-                case "CategoryArtist":
+                case "ArtistCategory":
                     countAttribute = 1;
                     break;
                 case "CircusArea":
@@ -232,6 +291,7 @@ namespace EduPrac
                     break;
 
             }
+
             countAttribute = AddorDel ? countAttribute : 1;
             switch (countAttribute)
             {
@@ -241,6 +301,7 @@ namespace EduPrac
                     FourthTextBox.Visibility = Visibility.Collapsed;
                     FifthTextBox.Visibility = Visibility.Collapsed;
                     SixthTextBox.Visibility = Visibility.Collapsed;
+                    SeventhTextBox.Visibility = Visibility.Collapsed;
                     break;
                 case 2:
                     SecondTextBox.Visibility = Visibility.Visible;
@@ -248,14 +309,247 @@ namespace EduPrac
                     FourthTextBox.Visibility = Visibility.Collapsed;
                     FifthTextBox.Visibility = Visibility.Collapsed;
                     SixthTextBox.Visibility = Visibility.Collapsed;
+                    SeventhTextBox.Visibility = Visibility.Collapsed;
                     break;
-                case 6:
+                case 5:
+                    SecondTextBox.Visibility = Visibility.Visible;
+                    ThirdTextBox.Visibility = Visibility.Visible;
+                    FourthTextBox.Visibility = Visibility.Visible;
+                    FifthTextBox.Visibility = Visibility.Visible;
+                    SixthTextBox.Visibility = Visibility.Collapsed;
+                    SeventhTextBox.Visibility = Visibility.Collapsed;
+                    break;
+                case 7:
                     SecondTextBox.Visibility = Visibility.Visible;
                     ThirdTextBox.Visibility = Visibility.Visible;
                     FourthTextBox.Visibility = Visibility.Visible;
                     FifthTextBox.Visibility = Visibility.Visible;
                     SixthTextBox.Visibility = Visibility.Visible;
+                    SeventhTextBox.Visibility = Visibility.Visible;
                     break;
+            }
+            try
+            {
+                switch (countAttribute)
+                {
+                    case 1:
+                        FirstTxt.Visibility = Visibility.Visible;
+                        FirstTxt.Text = AddorDel ? rusNameAttributes[0].ToString() : "Номер удаляемой записи";
+                        SecondTxt.Visibility = Visibility.Collapsed;
+                        ThirdTxt.Visibility = Visibility.Collapsed;
+                        FourthTxt.Visibility = Visibility.Collapsed;
+                        FifthTxt.Visibility = Visibility.Collapsed;
+                        SixthTxt.Visibility = Visibility.Collapsed;
+                        SeventhTxt.Visibility = Visibility.Collapsed;
+                        break;
+                    case 2:
+                        FirstTxt.Visibility = Visibility.Visible;
+                        FirstTxt.Text = rusNameAttributes[0].ToString();
+                        SecondTxt.Visibility = Visibility.Visible;
+                        SecondTxt.Text = rusNameAttributes[1].ToString();
+                        ThirdTxt.Visibility = Visibility.Collapsed;
+                        FourthTxt.Visibility = Visibility.Collapsed;
+                        FifthTxt.Visibility = Visibility.Collapsed;
+                        SixthTxt.Visibility = Visibility.Collapsed;
+                        SeventhTxt.Visibility = Visibility.Collapsed;
+                        break;
+                    case 5:
+                        FirstTxt.Visibility = Visibility.Visible;
+                        FirstTxt.Text = rusNameAttributes[0].ToString() + "(год.месяц.день час.минута)";
+                        SecondTxt.Visibility = Visibility.Visible;
+                        SecondTxt.Text = rusNameAttributes[1].ToString();
+                        ThirdTxt.Visibility = Visibility.Visible;
+                        ThirdTxt.Text = rusNameAttributes[2].ToString();
+                        FourthTxt.Visibility = Visibility.Visible;
+                        FourthTxt.Text = rusNameAttributes[3].ToString();
+                        FifthTxt.Visibility = Visibility.Visible;
+                        FifthTxt.Text = rusNameAttributes[4].ToString();
+                        SixthTxt.Visibility = Visibility.Collapsed;
+                        SeventhTxt.Visibility = Visibility.Collapsed;
+                        break;
+                    case 7:
+                        FirstTxt.Visibility = Visibility.Visible;
+                        FirstTxt.Text = rusNameAttributes[0].ToString();
+                        SecondTxt.Visibility = Visibility.Visible;
+                        SecondTxt.Text = rusNameAttributes[1].ToString();
+                        ThirdTxt.Visibility = Visibility.Visible;
+                        ThirdTxt.Text = rusNameAttributes[2].ToString();
+                        FourthTxt.Visibility = Visibility.Visible;
+                        FourthTxt.Text = rusNameAttributes[3].ToString();
+                        FifthTxt.Visibility = Visibility.Visible;
+                        FifthTxt.Text = rusNameAttributes[4].ToString();
+                        SixthTxt.Visibility = Visibility.Visible;
+                        SixthTxt.Text = rusNameAttributes[5].ToString();
+                        SeventhTxt.Visibility = Visibility.Visible;
+                        SeventhTxt.Text = rusNameAttributes[6].ToString();
+                        break;
+                }
+            }
+            catch
+            {
+
+            }
+        }
+        private string CheckString()
+        {
+            string valuesAttributs = "";
+            string[] txtboxes = { FirstTextBox.Text, SecondTextBox.Text, ThirdTextBox.Text, FourthTextBox.Text, FifthTextBox.Text, SixthTextBox.Text, SeventhTextBox.Text };
+
+            if (nameTable == "Artists")
+            {
+                txtboxes[1] = DataBase.SearchID("IdCategory","ArtistCategory", "NameCategory", "'" + txtboxes[1] + "'").ToString();
+            }
+            if (nameTable == "LogWork")
+            {
+                txtboxes[1] = DataBase.SearchID("IdArtist", "Artists", "FullNameArtist", "'" + txtboxes[1] + "'").ToString();
+                txtboxes[2] = DataBase.SearchID("IdArea", "CircusArea", "NameCircusArea", "'" + txtboxes[2] + "'").ToString();
+            }
+
+            for (int i = nameTable == "LogWork" ? 1 : 0; i < countAttribute; i++)
+            {
+                if (txtboxes[i].Trim() != "")
+                {
+                    if (Char.IsDigit(txtboxes[i].Trim().ToCharArray().ElementAt(0)) && txtboxes[i].Trim().ToCharArray().Length < 2)
+                    {
+                        if (i < countAttribute - 1)
+                        {
+                            valuesAttributs += txtboxes[i].Trim() + ",";
+                        }
+                        else
+                        {
+                            valuesAttributs += txtboxes[i].Trim();
+                        }
+                    }
+                    else
+                    {
+                        if (Char.IsLetter(txtboxes[i].Trim().ToCharArray().ElementAt(0)))
+                        {
+                            if (i < countAttribute - 1)
+                            {
+                                valuesAttributs += "N'" + txtboxes[i].Trim() + "'" + ",";
+                            }
+                            else
+                            {
+                                valuesAttributs += "N'" + txtboxes[i].Trim() + "'";
+                            }
+                        }
+                        else
+                        {
+                            if (i < countAttribute - 1)
+                            {
+                                valuesAttributs += "'" + txtboxes[i].Trim() + "'" + ",";
+                            }
+                            else
+                            {
+                                valuesAttributs += "'" + txtboxes[i].Trim() + "'";
+                            }
+                        }
+                    }
+                }
+                if (txtboxes[i].Trim() == "")
+                {
+                    if (i < countAttribute - 1)
+                    {
+                        valuesAttributs += "NULL" + ",";
+                    }
+                    else
+                    {
+                        valuesAttributs += "NULL";
+                    }
+                }
+            }
+
+            return query = $"INSERT INTO {nameTable}{Attributs} VALUES ({DataBase.newID(nameTable, idname)}, {valuesAttributs})"; ;
+        }
+
+        private void FirstTextBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            FirstTxt.Visibility = Visibility.Collapsed;
+        }
+
+        private void SecondTextBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            SecondTxt.Visibility = Visibility.Collapsed;
+        }
+
+        private void ThirdTextBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            ThirdTxt.Visibility = Visibility.Collapsed;
+        }
+
+        private void FourthTextBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            FourthTxt.Visibility = Visibility.Collapsed;
+        }
+
+        private void FifthTextBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            FifthTxt.Visibility = Visibility.Collapsed;
+        }
+
+        private void SixthTextBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            SixthTxt.Visibility = Visibility.Collapsed;
+        }
+
+        private void SeventhTextBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            SeventhTxt.Visibility = Visibility.Collapsed;
+        }
+
+        private void FirstTextBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (FirstTextBox.Text == "")
+            {
+                FirstTxt.Visibility = Visibility.Visible;
+            }
+        }
+
+        private void SecondTextBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (SecondTextBox.Text == "")
+            {
+                SecondTxt.Visibility = Visibility.Visible;
+            }
+        }
+
+        private void ThirdTextBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (ThirdTextBox.Text == "")
+            {
+                ThirdTxt.Visibility = Visibility.Visible;
+            }
+        }
+
+        private void FourthTextBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (FourthTextBox.Text == "")
+            {
+                FourthTxt.Visibility = Visibility.Visible;
+            }
+        }
+
+        private void FifthTextBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (FifthTextBox.Text == "")
+            {
+                FifthTxt.Visibility = Visibility.Visible;
+            }
+        }
+
+        private void SixthTextBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (SixthTextBox.Text == "")
+            {
+                SixthTxt.Visibility = Visibility.Visible;
+            }
+        }
+
+        private void SeventhTextBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (SeventhTextBox.Text == "")
+            {
+                SeventhTxt.Visibility = Visibility.Visible;
             }
         }
     }

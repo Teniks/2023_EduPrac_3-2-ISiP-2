@@ -17,7 +17,8 @@ C:\Users\Teniks_V\Documents\GitHub\2023_EduPrac_3-2-ISiP-2\EduPrac\bin\Debug\Sys
 C:\Users\Teniks_V\Documents\GitHub\2023_EduPrac_3-2-ISiP-2\EduPrac\obj\Debug\EduPrac.csproj.CopyComplete
 C:\Users\Teniks_V\Documents\GitHub\2023_EduPrac_3-2-ISiP-2\EduPrac\bin\Debug\data\Model\LD.mdf
 C:\Users\Teniks_V\Documents\GitHub\2023_EduPrac_3-2-ISiP-2\EduPrac\bin\Debug\data\Model\LD_log.ldf
-C:\Users\Teniks_V\Documents\GitHub\2023_EduPrac_3-2-ISiP-2\EduPrac\obj\Debug\data\ResStyles\ButtonMainStyle.baml
 C:\Users\Teniks_V\Documents\GitHub\2023_EduPrac_3-2-ISiP-2\EduPrac\obj\Debug\data\ResStyles\DataGridStyle.baml
 C:\Users\Teniks_V\Documents\GitHub\2023_EduPrac_3-2-ISiP-2\EduPrac\obj\Debug\data\View\MainWindow.g.cs
 C:\Users\Teniks_V\Documents\GitHub\2023_EduPrac_3-2-ISiP-2\EduPrac\obj\Debug\data\View\MainWindow.baml
+C:\Users\Teniks_V\Documents\GitHub\2023_EduPrac_3-2-ISiP-2\EduPrac\obj\Debug\data\ResStyles\ButtonMainStyles.baml
+C:\Users\Teniks_V\Documents\GitHub\2023_EduPrac_3-2-ISiP-2\EduPrac\obj\Debug\data\ResStyles\TBStyles.baml
