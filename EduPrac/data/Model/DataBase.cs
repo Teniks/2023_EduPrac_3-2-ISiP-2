@@ -47,10 +47,12 @@ namespace EduPrac
         {
             string listAttribute;
 
+            int max = Data[massAttr].Length;
+
             listAttribute = "(";
-            for (int i = log ? 1 : 0 ; i < Data[massAttr].Length; i++)
+            for (int i = log ? 1 : 0 ; i < max; i++)
             {
-                if (i < Data[massAttr].Length - 1)
+                if (i < max - 1)
                 {
                     listAttribute += $"{Data[massAttr][i]}" + ", ";
                 }
@@ -96,10 +98,52 @@ namespace EduPrac
             }
         }
 
-        public static bool checkIDisExists(in DataGrid dataGrid,in string Nameid,in string nameTable,in string nameValue,in string value)
+        public static bool checkIDisExistsDouble(in string nameTable, in string nameValue, in string value, in string nameValue2, in string value2 )
         {
             int counter = 0;
-            string querySQL = $"SELECT {Nameid} FROM {nameTable} WHERE {nameValue} = N{value}";
+            string querySQL = $"select * from {nameTable} where {nameValue} = {value}  and {nameValue2} = {value2}";
+
+            DataBase localDB = new DataBase();
+            SqlDataAdapter adapter = new SqlDataAdapter();
+            SqlDataReader reader;
+
+            try
+            {
+                localDB.openConection();
+
+                using (SqlCommand sqlCommand = new SqlCommand(querySQL, localDB.GetSqlConection()))
+                {
+                    adapter.SelectCommand = sqlCommand;
+                    reader = sqlCommand.ExecuteReader();
+                    reader.Read();
+                    if (reader.HasRows)
+                    {
+                        counter++;
+                    }
+
+                }
+            }
+            catch
+            {
+                MessageBox.Show("При проверке записи на наличие в базе данных возникла ошибка.");
+            }
+
+            localDB.closeConection();
+
+            if (counter != 1)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+        public static bool checkIDisExists(in DataGrid dataGrid,in string nameid,in string nameTable,in string nameValue,in string value)
+        {
+            int counter = 0;
+            string querySQL = $"SELECT {nameid} FROM {nameTable} WHERE {nameValue} = N{value}";
 
             DataBase localDB = new DataBase();
             SqlDataAdapter adapter = new SqlDataAdapter();
@@ -204,26 +248,33 @@ namespace EduPrac
             }
         }
 
-        public static void SearchInTable(in string searchSTR,in string nameTable ,in string[] attributs, in DataGrid dataGrid)
+        public static void SearchInTable(in string searchSTR,in string nameTable ,in string attribut, in DataGrid dataGrid, int oneOrTwo = 0, in string searchSTR2 = "" , in string attribut2 = "")
         {
-            string query = $"SELECT * FROM {nameTable}";
+            string query = $"";
 
-            for (int i = 0; i < attributs.Length; i++)
+            switch (oneOrTwo)
             {
-                query += $"SELECT * FROM {nameTable} WHERE {attributs[i]} = N'{searchSTR.Trim()}'  ";
+                case 0:
+                    query = $"SELECT IdRecordLog AS '№', FORMAT(DateGoingWork, N'yyyy/MM/dd HH:mm') as 'Вышел на работу', Artists.FullNameArtist as 'Полное имя'," +
+                    $"CircusArea.NameCircusArea as 'Цирковая площадка', FORMAT(EndTime, N'yyyy/MM/dd HH:mm') as 'Закончил работу', " +
+                    $"LaunchBreak as 'Перерыв' FROM {nameTable} left join Artists cross join CircusArea " +
+                    $" on LogWork.IdArtist = Artists.IdArtist and LogWork.IdArea = CircusArea.IdArea WHERE {attribut} = N'{searchSTR.Trim()}' ORDER BY DateGoingWork DESC";
+                    break;
+                case 1:
+                    query = $"SELECT IdRecordLog AS '№', FORMAT(DateGoingWork, N'yyyy/MM/dd HH:mm') as 'Вышел на работу', Artists.FullNameArtist as 'Полное имя'," +
+                    $"CircusArea.NameCircusArea as 'Цирковая площадка', FORMAT(EndTime, N'yyyy/MM/dd HH:mm') as 'Закончил работу', " +
+                    $"LaunchBreak as 'Перерыв' FROM {nameTable} left join Artists cross join CircusArea " +
+                    $" on LogWork.IdArtist = Artists.IdArtist and LogWork.IdArea = CircusArea.IdArea WHERE LogWork.{attribut} = N'{searchSTR.Trim()}' ORDER BY DateGoingWork DESC";
+                    break;
+                case 2:
+                    query = $"SELECT IdRecordLog AS '№', FORMAT(DateGoingWork, N'yyyy/MM/dd HH:mm') as 'Вышел на работу', Artists.FullNameArtist as 'Полное имя'," +
+                    $"CircusArea.NameCircusArea as 'Цирковая площадка', FORMAT(EndTime, N'yyyy/MM/dd HH:mm') as 'Закончил работу', " +
+                    $"LaunchBreak as 'Перерыв'  FROM {nameTable} left join Artists cross join CircusArea " +
+                    $" on LogWork.IdArtist = Artists.IdArtist and LogWork.IdArea = CircusArea.IdArea " +
+                    $"WHERE LogWork.{attribut} = N'{searchSTR.Trim()}'  and {attribut2} = N'{searchSTR2.Trim()}'  ORDER BY DateGoingWork DESC";
+                    break;
             }
-            conectTableSQL(query, dataGrid);
-        }
-        public static void SearchEach<T>(in T searchSTR, in string[] namesTable, in string[] attributs, in DataGrid dataGrid)
-        {
-            string query = "";
-            for(int j = namesTable.Length; j >= 0; j--)
-            {
-                for (int i = attributs.Length; i >= 0; i--)
-                {
-                    query += $"SELECT * FROM {namesTable[j]} WHERE {attributs[i]} = '{searchSTR}' \n";
-                }
-            }
+
             conectTableSQL(query, dataGrid);
         }
         public static int SearchID(in string Nameid, in string nameTable, in string nameValue, in string value)
@@ -264,7 +315,7 @@ namespace EduPrac
         /// <returns></returns>
         public static int GetSumMinuteWork(in int IdArtist, in int Month)
         {
-            string querySQL = "Select (FORMAT(EndTime, 'HH')*60 + FORMAT(EndTime, 'mm') - FORMAT(DateGoingWork, 'HH')*60+FORMAT(DateGoingWork, 'mm')) " +
+            string querySQL = "Select ((FORMAT(EndTime, 'HH')*60 + FORMAT(EndTime, 'mm') - FORMAT(DateGoingWork, 'HH')*60+FORMAT(DateGoingWork, 'mm')) - DATEPART(HOUR, LaunchBreak)*60 + DATEPART(MINUTE, LaunchBreak)) " +
                     "from LogWork where FORMAT(EndTime, 'yyyy/MM/dd') = FORMAT(DateGoingWork, 'yyyy/MM/dd')\r\nand FORMAT(EndTime, 'yyyy/MM') = FORMAT(DateGoingWork, 'yyyy/MM')" +
                     $" and IdArtist = {IdArtist} and FORMAT(DateGoingWork, 'MM') = {Month}";
             int answer = 0;
@@ -466,7 +517,7 @@ namespace EduPrac
             return month;
         }
         /// <summary>
-        /// Returns ranges of day and cchanges the count of day in total.
+        /// Returns ranges of day and changes the count of day in total.
         /// </summary>
         /// <param name="month"></param>
         /// <param name="year"></param>

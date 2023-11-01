@@ -7,7 +7,6 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="data/ResStyles/ButtonMainStyles.xaml"/>
-                <ResourceDictionary Source="data/ResStyles/DataGridStyle.xaml"/>
                 <ResourceDictionary Source="data/ResStyles/TBStyles.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>

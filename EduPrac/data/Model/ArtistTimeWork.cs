@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace EduPrac.data.Model
 {
+    /// <summary>
+    /// year, month, name artist, hours
+    /// </summary>
     public class ArtistTimeWork
     {
         public int year { get; set; }
