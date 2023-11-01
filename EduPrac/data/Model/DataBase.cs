@@ -10,6 +10,8 @@ using System.Windows;
 using System.Xml;
 using System.Collections;
 using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Windows.Media;
 
 namespace EduPrac
 {
@@ -202,13 +204,13 @@ namespace EduPrac
             }
         }
 
-        public static void SearchInTable<T>(in T searchSTR,in string nameTable ,in string[] attributs, in DataGrid dataGrid)
+        public static void SearchInTable(in string searchSTR,in string nameTable ,in string[] attributs, in DataGrid dataGrid)
         {
-            string query = "";
+            string query = $"SELECT * FROM {nameTable}";
 
-            for (int i = attributs.Length; i >= 0; i--)
+            for (int i = 0; i < attributs.Length; i++)
             {
-                query += $"SELECT * FROM {nameTable} WHERE {attributs[i]} = '{searchSTR}'";
+                query += $"SELECT * FROM {nameTable} WHERE {attributs[i]} = N'{searchSTR.Trim()}'  ";
             }
             conectTableSQL(query, dataGrid);
         }
@@ -253,6 +255,288 @@ namespace EduPrac
                 MessageBox.Show($"При запросе к базе данных произошла ошибка. Проверьте правильность отправляемых данных.");
             }
             return id;
+        }
+        /// <summary>
+        /// The query must request a single value
+        /// Запрос должен запрашивать одно значение
+        /// </summary>
+        /// <param name="IdArtist"></param>
+        /// <returns></returns>
+        public static int GetSumMinuteWork(in int IdArtist, in int Month)
+        {
+            string querySQL = "Select (FORMAT(EndTime, 'HH')*60 + FORMAT(EndTime, 'mm') - FORMAT(DateGoingWork, 'HH')*60+FORMAT(DateGoingWork, 'mm')) " +
+                    "from LogWork where FORMAT(EndTime, 'yyyy/MM/dd') = FORMAT(DateGoingWork, 'yyyy/MM/dd')\r\nand FORMAT(EndTime, 'yyyy/MM') = FORMAT(DateGoingWork, 'yyyy/MM')" +
+                    $" and IdArtist = {IdArtist} and FORMAT(DateGoingWork, 'MM') = {Month}";
+            int answer = 0;
+            try
+            {
+                DataBase localDB = new DataBase();
+                SqlDataAdapter adapter = new SqlDataAdapter();
+
+                localDB.openConection();
+
+                using (SqlCommand sqlCommand = new SqlCommand(querySQL, localDB.GetSqlConection()))
+                {
+                    adapter.SelectCommand = sqlCommand;
+                    DataTable dataTable = new DataTable();
+
+                    adapter.Fill(dataTable);
+                    try
+                    {
+                        for (int i = 0; i < dataTable.Rows.Count; i++)
+                        {
+                            answer += (int)dataTable.Rows[i][0];
+                        }
+                    }
+                    catch
+                    {
+                        
+                    }
+                }
+
+                localDB.closeConection();
+            }
+            catch
+            {
+                MessageBox.Show("При получении ответа на запрос возникла ошибка. Попробуйте снова");
+            }
+            return answer;
+        }
+        public static string GetFullName(in int IdArtist)
+        {
+            string querySQL = $"SELECT FullNameArtist from Artists where IdArtist = {IdArtist}";
+            string answer = "";
+            try
+            {
+                DataBase localDB = new DataBase();
+                SqlDataAdapter adapter = new SqlDataAdapter();
+
+                localDB.openConection();
+
+                using (SqlCommand sqlCommand = new SqlCommand(querySQL, localDB.GetSqlConection()))
+                {
+                    adapter.SelectCommand = sqlCommand;
+                    DataTable dataTable = new DataTable();
+
+                    adapter.Fill(dataTable);
+                    try
+                    {
+                        answer = (string)dataTable.Rows[0][0];
+                    }
+                    catch
+                    {
+
+                    }
+                }
+
+                localDB.closeConection();
+            }
+            catch
+            {
+                MessageBox.Show("При получении ответа на запрос возникла ошибка. Попробуйте снова");
+            }
+            return answer;
+        }
+        public static int GetFirstYear()
+        {
+            int year = 0000;
+
+            string querySQL = $"SELECT MIN(FORMAT(DateGoingWork, 'yyyy')) FROM LogWork";
+            DataBase localDB = new DataBase();
+            SqlDataAdapter adapter = new SqlDataAdapter();
+            SqlDataReader reader;
+
+            try
+            {
+                localDB.openConection();
+
+                using (SqlCommand sqlCommand = new SqlCommand(querySQL, localDB.GetSqlConection()))
+                {
+                    adapter.SelectCommand = sqlCommand;
+                    reader = sqlCommand.ExecuteReader();
+                    reader.Read();
+                    if (reader.HasRows)
+                    {
+                        string yearS = (string)reader[0];
+                        year = Convert.ToInt32(yearS);
+                    }
+                }
+            }
+            catch
+            {
+
+            }
+
+            return year;
+        }
+        public static int GetLastYear()
+        {
+            int year = 0000;
+
+            string querySQL = $"SELECT MAX(FORMAT(DateGoingWork, 'yyyy')) FROM LogWork";
+            DataBase localDB = new DataBase();
+            SqlDataAdapter adapter = new SqlDataAdapter();
+            SqlDataReader reader;
+
+            try
+            {
+                localDB.openConection();
+
+                using (SqlCommand sqlCommand = new SqlCommand(querySQL, localDB.GetSqlConection()))
+                {
+                    adapter.SelectCommand = sqlCommand;
+                    reader = sqlCommand.ExecuteReader();
+                    reader.Read();
+                    if (reader.HasRows)
+                    {
+                        string yearS = (string)reader[0];
+                        year = Convert.ToInt32(yearS);
+                    }
+                }
+            }
+            catch
+            {
+
+            }
+
+            return year;
+        }
+        public static int GetFirstMonth(in int year)
+        {
+            int month = 0;
+
+            string querySQL = $"SELECT MIN(FORMAT(DateGoingWork, 'MM')) FROM LogWork WHERE FORMAT(DateGoingWork, 'yyyy') = {year}";
+            DataBase localDB = new DataBase();
+            SqlDataAdapter adapter = new SqlDataAdapter();
+            SqlDataReader reader;
+
+            try
+            {
+                localDB.openConection();
+
+                using (SqlCommand sqlCommand = new SqlCommand(querySQL, localDB.GetSqlConection()))
+                {
+                    adapter.SelectCommand = sqlCommand;
+                    reader = sqlCommand.ExecuteReader();
+                    reader.Read();
+                    if (reader.HasRows)
+                    {
+                        string monthS= (string)reader[0];
+                        month = Convert.ToInt32(monthS);
+                    }
+                }
+            }
+            catch
+            {
+
+            }
+
+            return month;
+        }
+        public static int GetLastMonth(in int year)
+        {
+            int month = 0000;
+
+            string querySQL = $"SELECT MAX(FORMAT(DateGoingWork, 'MM')) FROM LogWork WHERE FORMAT(DateGoingWork, 'yyyy') = {year}";
+            DataBase localDB = new DataBase();
+            SqlDataAdapter adapter = new SqlDataAdapter();
+            SqlDataReader reader;
+
+            try
+            {
+                localDB.openConection();
+
+                using (SqlCommand sqlCommand = new SqlCommand(querySQL, localDB.GetSqlConection()))
+                {
+                    adapter.SelectCommand = sqlCommand;
+                    reader = sqlCommand.ExecuteReader();
+                    reader.Read();
+                    if (reader.HasRows)
+                    {
+                        string monthS = (string)reader[0];
+                        month = Convert.ToInt32(monthS);
+                    }
+                }
+            }
+            catch
+            {
+
+            }
+
+            return month;
+        }
+        /// <summary>
+        /// Returns ranges of day and cchanges the count of day in total.
+        /// </summary>
+        /// <param name="month"></param>
+        /// <param name="year"></param>
+        /// <param name="idArtist"></param>
+        /// <param name="countDay"></param>
+        /// <returns></returns>
+        public static string GetWorkDay(in int year, in int month, in int idArtist, ref int countDay)
+        {
+            string querySQL = $"SELECT FORMAT(DateGoingWork, 'dd') FROM LogWork where FORMAT(DateGoingWork, 'MM') = {month} and FORMAT(DateGoingWork, 'yyyy') = {year} and IdArtist = {idArtist}";
+            string answer = ""; countDay = 0;
+            try
+            {
+                DataBase localDB = new DataBase();
+                SqlDataAdapter adapter = new SqlDataAdapter();
+
+                localDB.openConection();
+
+                using (SqlCommand sqlCommand = new SqlCommand(querySQL, localDB.GetSqlConection()))
+                {
+                    adapter.SelectCommand = sqlCommand;
+                    DataTable dataTable = new DataTable();
+
+                    adapter.Fill(dataTable);
+                    try
+                    {
+                        countDay = dataTable.Rows.Count;
+
+                        if (countDay != 1 && countDay != 0)
+                        {
+                            for (int i = 0; i < dataTable.Rows.Count; i++)
+                            {
+                                if(i != dataTable.Rows.Count-1)
+                                {
+                                    if (Convert.ToInt32((string)dataTable.Rows[i + 1][0]) - Convert.ToInt32((string)dataTable.Rows[i][0]) != 1)
+                                    {
+                                        answer += Convert.ToInt32((string)dataTable.Rows[i][0]) + " ";
+                                    }
+                                    if (Convert.ToInt32((string)dataTable.Rows[i][0]) + 1 == Convert.ToInt32((string)dataTable.Rows[i + 1][0]))
+                                    {
+                                        if (!answer.EndsWith("."))
+                                            answer += Convert.ToInt32((string)dataTable.Rows[i][0]) + ".";
+                                        else answer += ".";
+                                    }
+                                }
+                                else
+                                {
+                                    if (answer.EndsWith("."))
+                                        answer += "." + Convert.ToInt32((string)dataTable.Rows[i][0]) + " ";
+                                    else answer += " " + Convert.ToInt32((string)dataTable.Rows[i][0]);
+                                }
+
+                            }
+                        }
+                        else
+                        {
+                            if (countDay != 0)
+                                    answer += Convert.ToInt32((string)dataTable.Rows[0][0]);
+                        }
+                        
+                    }
+                    catch
+                    {
+
+                    }
+                }
+
+                localDB.closeConection();
+            }catch { }
+
+            return answer;
         }
     }
 }

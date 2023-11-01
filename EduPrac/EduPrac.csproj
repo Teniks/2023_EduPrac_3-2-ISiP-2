@@ -93,6 +93,8 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="data\Model\ArtistDaysWork.cs" />
+    <Compile Include="data\Model\ArtistTimeWork.cs" />
     <Compile Include="data\Model\DataBase.cs" />
     <Compile Include="data\View\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

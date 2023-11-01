@@ -1,11 +1,14 @@
-﻿using System;
+﻿using EduPrac.data.Model;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -20,7 +23,7 @@ namespace EduPrac
     /// </summary>
     public partial class MainWindow : Window
     {
-        string query;
+        
         string[][] TableData = 
         {   new string[] { "LogWork", "Artists", "ArtistCategory", "CircusArea"},
             new string[] { "IdRecordLog", "DateGoingWork", "IdArtist", "IdArea", "EndTime", "LaunchBreak"},
@@ -31,11 +34,14 @@ namespace EduPrac
 
         string[] rusNameAttributes;
 
-        string nameTable;
+        string nameTable = "";
         string Attributs;
+        string query;
         string idname;
-        int countAttribute;
         bool AddorDel;
+        int workMode = 1;
+        bool searchActuve = false;
+        int countAttribute;
 
         public MainWindow()
         {
@@ -54,7 +60,7 @@ namespace EduPrac
                     "CircusArea.NameCircusArea as 'Цирковая площадка', FORMAT(EndTime, N'yyyy/MM/dd HH:mm') as 'Закончил работу', " +
                     "LaunchBreak as 'Перерыв' " +
                     "from LogWork left join Artists cross join CircusArea " +
-                    "on LogWork.IdArtist = Artists.IdArtist and LogWork.IdArea = CircusArea.IdArea";
+                    "on LogWork.IdArtist = Artists.IdArtist and LogWork.IdArea = CircusArea.IdArea ORDER BY DateGoingWork DESC";
 
             rusNameAttributes = new string[] { "Вышел", "Полное имя", "Цирковая площадка", "Закончил работу", "Перерыв" };
             DataBase.conectTableSQL(query, DataGridTableArea);
@@ -90,7 +96,6 @@ namespace EduPrac
             Attributs = DataBase.GetAttribut(TableData, 3);
             idname = TableData[3][0];
         }
-
         private void ButtonCircusArea_PreviewMouseUp(object sender, MouseButtonEventArgs e)
         {
             TableVisElementEdit();
@@ -103,7 +108,6 @@ namespace EduPrac
             Attributs = DataBase.GetAttribut(TableData, 4);
             idname = TableData[4][0];
         }
-
         private void AddRow_PreviewMouseUp(object sender, MouseButtonEventArgs e)
         {
             //Операция чередования элементов при взаимодействии с одной из двух кнопок
@@ -199,6 +203,12 @@ namespace EduPrac
                 }
                 string query = $"DELETE FROM {nameTable} WHERE {idname} = {FirstTextBox.Text}";
                 DataBase.querySQL(query);
+                int recountId = Convert.ToInt32(FirstTextBox.Text) != 1 ? Convert.ToInt32(FirstTextBox.Text) : 1;
+                for (int i = Convert.ToInt32(FirstTextBox.Text); i < DataBase.newID(nameTable,idname); i++)
+                {
+                    query += $"UPDATE {nameTable} SET {idname} = {recountId} where {idname} = {i} ";
+                }
+                DataBase.querySQL(query);
             }
         }
 
@@ -218,9 +228,10 @@ namespace EduPrac
         }
         private void Settings_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            if(SettingsPanel.Visibility == Visibility.Collapsed)
+            if (SettingsPanel.Visibility == Visibility.Collapsed)
                 SettingsPanel.Visibility = Visibility.Visible;
-            else SettingsPanel.Visibility = Visibility.Collapsed;
+            else
+                SettingsPanel.Visibility = Visibility.Collapsed;
         }
         private void CloseButton_MouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -248,10 +259,7 @@ namespace EduPrac
                 }
             }
         }
-        private void SearchSortBtn_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            ChangesEditVisElementEdit();
-        }
+
         private void TableVisElementEdit()
         {
             AddRowBorder.Visibility = Visibility.Visible;
@@ -486,9 +494,189 @@ namespace EduPrac
         }
             
 
+        
+
+        private void SettingsPanel_MouseLeave(object sender, MouseEventArgs e)
+        {
+            if (!searchActuve)
+            {
+                SettingsPanel.Visibility = Visibility.Collapsed;
+            }
+            searchActuve = false;
+        }
+
+        private void SearchPanel_MouseLeave(object sender, MouseEventArgs e)
+        {
+            SearchPanel.Visibility = Visibility.Collapsed;
+            SettingsPanel.Visibility = Visibility.Collapsed;
+        }
+        private void ShowSlidePanel(Grid grid)
+        {
+            DoubleAnimation animation = new DoubleAnimation
+            {
+                From = 0,
+                To = 500,  // задайте необходимую ширину для выдвигаемой панели
+                Duration = new Duration(TimeSpan.FromSeconds(0.15)) // необходимая продолжительность анимации
+            };
+
+            Storyboard.SetTargetName(animation, grid.Name);
+            Storyboard.SetTargetProperty(animation, new PropertyPath(Grid.WidthProperty));
+
+            Storyboard storyboard = new Storyboard();
+            storyboard.Children.Add(animation);
+
+            storyboard.Begin(this);
+
+            animation = new DoubleAnimation
+            {
+                From = 0,
+                To = 400, // задайте необходимую ширину для выдвигаемой панели
+                Duration = new Duration(TimeSpan.FromSeconds(0.15)) // задайте необходимую продолжительность анимации
+            };
+
+            Storyboard.SetTargetName(animation, grid.Name);
+            Storyboard.SetTargetProperty(animation, new PropertyPath(Border.HeightProperty));
+
+            storyboard = new Storyboard();
+            storyboard.Children.Add(animation);
+
+            storyboard.Begin(this);
+
+        }
+        private void HideSlidePanel(Grid grid)
+        {
+            DoubleAnimation animation = new DoubleAnimation
+            {
+                From = 500,
+                To = 0, // задайте необходимую ширину для выдвигаемой панели
+                Duration = new Duration(TimeSpan.FromSeconds(0.15)) // задайте необходимую продолжительность анимации
+            };
+
+            Storyboard.SetTargetName(animation, grid.Name);
+            Storyboard.SetTargetProperty(animation, new PropertyPath(Grid.WidthProperty));
+
+            Storyboard storyboard = new Storyboard();
+            storyboard.Children.Add(animation);
+
+            storyboard.Begin(this);
+
+            animation = new DoubleAnimation
+            {
+                From = 400,
+                To = 0, // задайте необходимую ширину для выдвигаемой панели
+                Duration = new Duration(TimeSpan.FromSeconds(0.15)) // задайте необходимую продолжительность анимации
+            };
+
+            Storyboard.SetTargetName(animation, grid.Name);
+            Storyboard.SetTargetProperty(animation, new PropertyPath(Border.HeightProperty));
+
+            storyboard = new Storyboard();
+            storyboard.Children.Add(animation);
+
+            storyboard.Begin(this);
+        }
+
+        private void HumanHours_PreviewMouseUp(object sender, MouseButtonEventArgs e)
+        {
+            TableVisElementEdit();
+
+            string query = "SELECT * FROM LogWork";
+            nameTable = TableData[0][0];
+
+            switch (workMode)
+            {
+                case 1:
+                    query = "Select FORMAT(DateGoingWork, 'yyyy/MM/dd') AS 'Дата выхода' , Artists.FullNameArtist AS 'Имя артиста', " +
+                            "(FORMAT(EndTime, 'HH')*60 + FORMAT(EndTime, 'mm') - FORMAT(DateGoingWork, 'HH')*60+FORMAT(DateGoingWork, 'mm'))/60 AS 'Часов отработано',  " +
+                            "(FORMAT(EndTime, 'HH')*60 + FORMAT(EndTime, 'mm') - FORMAT(DateGoingWork, 'HH')*60+FORMAT(DateGoingWork, 'mm'))%60 AS 'Минут отработано' " +
+                            "from LogWork left join Artists on LogWork.IdArtist = Artists.IdArtist " +
+                            "where FORMAT(EndTime, 'yyyy/MM/dd') = FORMAT(DateGoingWork, 'yyyy/MM/dd')\r\nand FORMAT(EndTime, 'yyyy/MM') = FORMAT(DateGoingWork, 'yyyy/MM')  ORDER BY DateGoingWork DESC";
+
+                    rusNameAttributes = new string[] { "Вышел", "Полное имя", "Цирковая площадка", "Закончил работу", "Перерыв" };
+                    DataBase.conectTableSQL(query, DataGridTableArea);
+                    Attributs = DataBase.GetAttribut(TableData, 1);
+                    idname = TableData[1][0];
+                    break;
+                case 2:
+                    DataGridTableArea.Columns.Clear();
+
+                    ObservableCollection<ArtistTimeWork> HoursPeople = new ObservableCollection<ArtistTimeWork>();
+                    DataGridTableArea.AutoGenerateColumns = true;
+                    DataGridTableArea.ItemsSource = HoursPeople;
+
+                    for (int y = DataBase.GetLastYear(); y >= DataBase.GetFirstYear(); y--)
+                    {
+                        if (y == DataBase.GetLastYear())
+                        {
+                            for (int j = DataBase.GetLastMonth(y); j >= DataBase.GetFirstMonth(y); j--)
+                            {
+                                for (int i = 1; i < DataBase.newID("Artists", "IdArtist"); i++)
+                                {
+                                    HoursPeople.Add(new ArtistTimeWork { name = DataBase.GetFullName(i), hours = Math.Round(DataBase.GetSumMinuteWork(i, j) / 60.0, 2), month = Convert.ToString(j), year = y });
+                                }
+                            }
+                        }
+                        else
+                        {
+                            for (int i = 1; i < DataBase.newID("Artists", "IdArtist"); i++)
+                            {
+                                double hours = 0;
+                                for (int j = DataBase.GetLastMonth(y); j >= DataBase.GetFirstMonth(y); j--)
+                                {
+                                    hours += Math.Round(DataBase.GetSumMinuteWork(i, j) / 60.0, 2);
+                                }
+                                HoursPeople.Add(new ArtistTimeWork { name = DataBase.GetFullName(i), hours = hours, month = "За все", year = y });
+                            }
+                        }
+                    }
+                    break;
+                case 3:
+                    ObservableCollection<ArtistDaysWork> days = new ObservableCollection<ArtistDaysWork>();
+                    DataGridTableArea.AutoGenerateColumns = true;
+                    DataGridTableArea.ItemsSource = days;
+                    Dictionary<int, string> nameMonth = new Dictionary<int, string> (){ { 1 , "Январь" }, { 2, "Февраль" }, { 3, "Март" }, { 4, "Апрель" }, 
+                                                                                        { 5, "Май" }, { 6, "Июнь" }, { 7, "Июль" }, { 8, "Август" }, 
+                                                                                        { 9, "Сентябрь" }, { 10, "Октябрь" }, { 11, "Ноябрь" }, { 12, "Декабрь" } };
+
+                    for(int y = DataBase.GetLastYear(); y >= DataBase.GetFirstYear(); y--)
+                    {
+                        for (int j = DataBase.GetLastMonth(y); j >= DataBase.GetFirstMonth(y); j--)
+                        {
+                            days.Add(new ArtistDaysWork { Name = $"----{nameMonth[j]}----" });
+
+                            for (int i = 1; i < DataBase.newID("Artists", "IdArtist"); i++)
+                            {
+                                int countDayWork = 0;
+                                days.Add(new ArtistDaysWork { Name = DataBase.GetFullName(i), Month = Convert.ToString(j), Day = DataBase.GetWorkDay(y, j, i, ref countDayWork), Count = Convert.ToString(countDayWork) });
+                            }
+                        }
+                        days.Add(new ArtistDaysWork { Name = $"----{y} год----"});
+                    }
+                    break;
+            }
+
+            workMode = workMode == 3? 1 : workMode + 1;
+        }
+
+        private void SearchSortBtn_PreviewMouseUp(object sender, MouseButtonEventArgs e)
+        {
+            searchActuve = true;
+            if (SearchPanel.Visibility == Visibility.Collapsed)
+                SearchPanel.Visibility = Visibility.Visible;
+            else
+                SearchPanel.Visibility = Visibility.Collapsed;
+        }
         private void FirstTextBox_GotFocus(object sender, RoutedEventArgs e)
         {
+            //Подсказка при вводе даты
             FirstTxt.Visibility = Visibility.Collapsed;
+            if(nameTable == "LogWork")
+            {
+                GridReminder.Margin = new Thickness(325,  50,  10, 10);
+                Reminder.Text = "Срок даты не должен превышать 1 дня. \nПри нахождении на месте работы больше 1 дня,\nучитывайте только фактическое время работы\nв рамках одного дня";
+                
+                GridReminder.Visibility = Visibility.Visible;
+            }
         }
 
         private void SecondTextBox_GotFocus(object sender, RoutedEventArgs e)
@@ -503,7 +691,15 @@ namespace EduPrac
 
         private void FourthTextBox_GotFocus(object sender, RoutedEventArgs e)
         {
+            //Подсказка при вводе даты
             FourthTxt.Visibility = Visibility.Collapsed;
+            if (nameTable == "LogWork")
+            {
+                GridReminder.Margin = new Thickness(325, 200, 10, 10);
+                Reminder.Text = "Срок даты не должен превышать 1 дня. \nПри нахождении на месте работы больше 1 дня,\nучитывайте только фактическое время работы\nв рамках одного дня";
+                
+                GridReminder.Visibility = Visibility.Visible;
+            }
         }
 
         private void FifthTextBox_GotFocus(object sender, RoutedEventArgs e)
@@ -527,6 +723,7 @@ namespace EduPrac
             {
                 FirstTxt.Visibility = Visibility.Visible;
             }
+            GridReminder.Visibility = Visibility.Collapsed;
         }
 
         private void SecondTextBox_LostFocus(object sender, RoutedEventArgs e)
@@ -551,6 +748,7 @@ namespace EduPrac
             {
                 FourthTxt.Visibility = Visibility.Visible;
             }
+            GridReminder.Visibility = Visibility.Collapsed;
         }
 
         private void FifthTextBox_LostFocus(object sender, RoutedEventArgs e)
@@ -577,74 +775,35 @@ namespace EduPrac
             }
         }
 
-        private void SettingsPanel_MouseLeave(object sender, MouseEventArgs e)
+        private void TextBox_KeyDown(object sender, KeyEventArgs e)
         {
-            SettingsPanel.Visibility = Visibility.Collapsed;
-        }
-
-        private void ShowSlidePanel(Grid grid)
-        {
-            DoubleAnimation animation = new DoubleAnimation();
-            animation.From = 0;
-            animation.To = 500;  // задайте необходимую ширину для выдвигаемой панели
-            animation.Duration = new Duration(TimeSpan.FromSeconds(0.1)); // необходимая продолжительность анимации
-
-            Storyboard.SetTargetName(animation, grid.Name);
-            Storyboard.SetTargetProperty(animation, new PropertyPath(Grid.WidthProperty));
-
-            Storyboard storyboard = new Storyboard();
-            storyboard.Children.Add(animation);
-
-            storyboard.Begin(this);
-
-            animation = new DoubleAnimation();
-
-
-
-
-
-
-            animation.From = 0;
-            animation.To = 400; // задайте необходимую ширину для выдвигаемой панели
-            animation.Duration = new Duration(TimeSpan.FromSeconds(0.1)); // задайте необходимую продолжительность анимации
-
-            Storyboard.SetTargetName(animation, grid.Name);
-            Storyboard.SetTargetProperty(animation, new PropertyPath(Border.HeightProperty));
-
-            storyboard = new Storyboard();
-            storyboard.Children.Add(animation);
-
-            storyboard.Begin(this);
-
-        }
-        private void HideSlidePanel(Grid grid)
-        {
-            DoubleAnimation animation = new DoubleAnimation();
-            animation.From = 500;
-            animation.To = 0; // задайте необходимую ширину для выдвигаемой панели
-            animation.Duration = new Duration(TimeSpan.FromSeconds(0.3)); // задайте необходимую продолжительность анимации
-
-            Storyboard.SetTargetName(animation, grid.Name);
-            Storyboard.SetTargetProperty(animation, new PropertyPath(Grid.WidthProperty));
-
-            Storyboard storyboard = new Storyboard();
-            storyboard.Children.Add(animation);
-
-            storyboard.Begin(this);
-
-            animation = new DoubleAnimation();
-
-            animation.From = 400;
-            animation.To = 0; // задайте необходимую ширину для выдвигаемой панели
-            animation.Duration = new Duration(TimeSpan.FromSeconds(0.3)); // задайте необходимую продолжительность анимации
-
-            Storyboard.SetTargetName(animation, grid.Name);
-            Storyboard.SetTargetProperty(animation, new PropertyPath(Border.HeightProperty));
-
-            storyboard = new Storyboard();
-            storyboard.Children.Add(animation);
-
-            storyboard.Begin(this);
+            if(e.Key == Key.Enter)
+            {
+                if (SearchTextBox.Text.Trim() != "")
+                {
+                    string[] attr = TableData[1];
+                    if (nameTable == ""){
+                        attr = TableData[1];
+                    }
+                    if (nameTable == "LogWork")
+                    {
+                        attr = TableData[1];
+                    }
+                    if (nameTable == "Artists")
+                    {
+                        attr = TableData[2];
+                    }
+                    if (nameTable == "ArtistCategory")
+                    {
+                        attr = TableData[3];
+                    }
+                    if (nameTable == "CircusArea")
+                    {
+                        attr = TableData[4];
+                    }
+                    DataBase.SearchInTable(SearchTextBox.Text.Trim(), nameTable == "" ? TableData[0][0] : nameTable, attr, DataGridTableArea);
+                }
+            }
         }
     }
 }

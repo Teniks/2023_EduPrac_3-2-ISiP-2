@@ -282,6 +282,7 @@
                                          Margin="20 5 20 5" Style="{StaticResource CustomTextBox}" GotFocus="SixthTextBox_GotFocus" LostFocus="SixthTextBox_LostFocus"/>
                                 <TextBox Name="SeventhTextBox" AcceptsReturn="False" VerticalAlignment="Top" HorizontalAlignment="Left"
                                          Margin="20 5 20 5" Style="{StaticResource CustomTextBox}" GotFocus="SeventhTextBox_GotFocus" LostFocus="SeventhTextBox_LostFocus"/>
+                                
                             </StackPanel>
                         </Border>
                         <Border Name="ButtonBorderSaveChanges" Height="50" Width="150" VerticalAlignment="Bottom" 
@@ -358,33 +359,84 @@
                             </Style>
                         </TextBlock.Style>
                     </TextBlock>
-                    <Grid Name="SettingsPanel" Height="210" Width="210" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="10 0 10 0"
-                          Visibility="Visible" MouseLeave="SettingsPanel_MouseLeave">
+                    <Grid Name="GridReminder" Height="100" Width="350" VerticalAlignment="Top" HorizontalAlignment="Left"
+                          Margin="325 50 10 10" Visibility="Collapsed">
+                       
                         <Polygon Fill="Black" StrokeThickness="3" Stroke="Black"
-                                 Points="0, 8,
-                                         0, 200,
-                                         200, 200
-                                         200, 8,
-                                         20, 8,
-                                         30, 0,
-                                         40, 8"/>
+                         Points="8, 85,
+                                 340, 85
+                                 340, 0,
+                                 8, 0,
+                                 0, 16,
+                                 8, 32"/>
                         <Polygon Fill="#FF2F4F52" StrokeThickness="1" Stroke="#FF2F4F52"
-                                 Points="0, 8,
-                                         0, 200,
-                                         200, 200
-                                         200, 8,
-                                         20, 8,
+                         Points="8, 85,
+                                 340, 85
+                                 340, 0,
+                                 8, 0,
+                                 0, 16,
+                                 8, 32"/>
+                        <TextBlock Name="Reminder" VerticalAlignment="Top" HorizontalAlignment="Left"
+                                   IsHitTestVisible="False" FontSize="14" Visibility="Visible"
+                                   Foreground="#FF9AC3BE" Text="{Binding}" Margin="10 5 10 5">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                    </Grid>
+                    <Grid Name="SettingsPanel" Height="70" Width="210" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="10 0 10 0"
+                          Visibility="Collapsed" MouseLeave="SettingsPanel_MouseLeave" Background="Transparent">
+                        <Polygon Fill="Black" StrokeThickness="3" Stroke="Black"
+                                 Points="0, 10,
+                                         0, 65,
+                                         200, 65
+                                         200, 10,
+                                         20, 10,
                                          30, 0,
-                                         40, 8"/>
+                                         40, 10"/>
+                        <Polygon Fill="#FF2F4F52" StrokeThickness="1" Stroke="#FF2F4F52"
+                                 Points="0, 10,
+                                         0, 65,
+                                         200, 65
+                                         200, 10,
+                                         20, 10,
+                                         30, 0,
+                                         40, 10"/>
                         <Grid Height="190" Width="200" VerticalAlignment="Top" HorizontalAlignment="Left"
                               Margin="0, 10, 0, 10">
                             <StackPanel Orientation="Vertical">
-                                <Button Name="SearchSortBtn" Style="{StaticResource CustomButtonSettings}" MouseDown="SearchSortBtn_MouseDown">
-                                    <TextBlock Text="Поиск / Сортировка"/>
+                                <Button Name="SearchSortBtn" Style="{StaticResource CustomButtonSettings}" PreviewMouseUp="SearchSortBtn_PreviewMouseUp" >
+                                    <TextBlock Text="Поиск"/>
                                 </Button>
-                                <Button Name="HumanHours" Style="{StaticResource CustomButtonSettings}">
+                                <Button Name="HumanHours" Style="{StaticResource CustomButtonSettings}" PreviewMouseUp="HumanHours_PreviewMouseUp">
                                     <TextBlock Text="Часы на человека" />
                                 </Button>
+                            </StackPanel>
+                        </Grid>
+                    </Grid>
+                    <Grid Name="SearchPanel" Height="65" Width="210" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="12 0 220 0"
+                          Visibility="Collapsed" Background="Transparent" MouseLeave="SearchPanel_MouseLeave">
+                        <Polygon Fill="Black" StrokeThickness="3" Stroke="Black"
+                         Points="0, 10,
+                                 200, 10,
+                                 205, 20,
+                                 200, 30,
+                                 200, 60,
+                                 0, 60"/>
+                        <Polygon Fill="#FF86AFAA" StrokeThickness="1" Stroke="#FF86AFAA"
+                         Points="0, 10,
+                                 200, 10,
+                                 205, 20,
+                                 200, 30,
+                                 200, 60,
+                                 0, 60"/>
+                        <Grid MinHeight="60" Width="200" VerticalAlignment="Top" HorizontalAlignment="Left"
+                                Margin="0, 10, 0, 10">
+                            <StackPanel Orientation="Vertical">
+                                <TextBox Name="SearchTextBox" MinWidth="190" Style="{StaticResource CustomTextBox}" Margin="5 5 5 5" KeyDown="TextBox_KeyDown" />
+                                
                             </StackPanel>
                         </Grid>
                     </Grid>
