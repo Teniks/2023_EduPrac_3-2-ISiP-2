@@ -1,4 +1,5 @@
 ﻿using EduPrac.data.Model;
+using Microsoft.Win32;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -6,6 +7,7 @@ using System.Collections.ObjectModel;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -15,6 +17,7 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Xml;
+using Excel = Microsoft.Office.Interop.Excel;
 
 namespace EduPrac
 {
@@ -227,6 +230,40 @@ namespace EduPrac
 
         private void CreateDocs_PreviewMouseUp(object sender, MouseButtonEventArgs e)
         {
+
+            try
+            {
+                DataTable Buffer = (DataTable)DataGridTableArea.ItemsSource;
+                //Создаем обьект приложения Excel
+                Excel.Application exApp = new Excel.Application();
+                //Создаем книгу
+                Excel.Workbook Book = new Excel.Workbook();
+                //Создаем лист
+                Excel.Worksheets exSheet = (Excel.Worksheets)Book.ActiveSheet;
+                //Перебираем элементы и переносим в лист
+                for (int j = 0; j < Buffer.Rows.Count; j++)
+                {
+                    for (int i = 0; i < Buffer.Columns.Count; i++)
+                    {
+                        exApp.Cells[j][i] = Buffer.Rows[j][i].ToString();
+                    }
+                }
+
+                exApp.Workbooks.Add(Book);
+
+                //Открытие приложения
+                exApp.Visible = true;
+
+                //Высвобождение ресурсов
+                Marshal.FinalReleaseComObject(exSheet);
+                Marshal.FinalReleaseComObject(exApp);
+                exSheet = null;
+                exApp = null;
+            }
+            catch
+            {
+                MessageBox.Show("Возможно на вашем компьютере отсутствует Excel.");
+            }
 
         }
 

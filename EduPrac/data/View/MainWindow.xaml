@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:EduPrac"
         mc:Ignorable="d"
-        Height="720" Width="1280" WindowStyle="None" WindowStartupLocation="CenterScreen" ResizeMode="CanResize">
+        Height="720" Width="1280" WindowStyle="None" WindowStartupLocation="CenterScreen" ResizeMode="CanResize" Icon="/data/View/Images/nPersons.png">
     <Window.Background>
         <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
             <GradientStop Color="#FF86AFAA"/>
