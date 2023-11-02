@@ -45,6 +45,7 @@ namespace EduPrac
         int workMode = 1;
         bool searchActuve = false;
         int countAttribute;
+        public static DataTable dTable = new DataTable();
 
         public MainWindow()
         {
@@ -230,10 +231,9 @@ namespace EduPrac
 
         private void CreateDocs_PreviewMouseUp(object sender, MouseButtonEventArgs e)
         {
-
             try
             {
-                DataTable Buffer = DataBase.dataTable;
+                DataTable Buffer = dTable;
                 //Создаем обьект приложения Excel
                 Excel.Application exApp = new Excel.Application();
                 //Создаем книгу
@@ -370,6 +370,15 @@ namespace EduPrac
                             }
                         }
                     }
+                    dTable.Columns.Clear();
+                    dTable.Columns.Add("Год");
+                    dTable.Columns.Add("Месяц");
+                    dTable.Columns.Add("Имя");
+                    dTable.Columns.Add("Часов");
+                    foreach (var item in HoursPeople)
+                    {
+                        dTable.Rows.Add(item.year, item.month, item.name, item.hours);
+                    }
                     break;
                 case 3:
                     ObservableCollection<ArtistDaysWork> days = new ObservableCollection<ArtistDaysWork>();
@@ -392,6 +401,15 @@ namespace EduPrac
                             }
                         }
                         days.Add(new ArtistDaysWork { Name = $"----{y} год----"});
+                    }
+                    dTable.Columns.Clear();
+                    dTable.Columns.Add("Имя");
+                    dTable.Columns.Add("Месяц");
+                    dTable.Columns.Add("В какие дни был");
+                    dTable.Columns.Add("Количество дней за месяц");
+                    foreach (var item in days)
+                    {
+                        dTable.Rows.Add(item.Name, item.Month, item.Day, item.Count);
                     }
                     break;
             }

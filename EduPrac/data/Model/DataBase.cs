@@ -21,7 +21,7 @@ namespace EduPrac
         SqlConnection sqlConnection = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;
                                                           AttachDbFilename=C:\Users\Teniks_V\Documents\GitHub\2023_EduPrac_3-2-ISiP-2\EduPrac\data\Model\LD.mdf;
                                                           Integrated Security=True");
-        public static DataTable dataTable = new DataTable();
+        
 
         public void openConection()
         {
@@ -81,8 +81,12 @@ namespace EduPrac
                     dataGrid.Columns.Clear();
                     dataGrid.HorizontalAlignment = HorizontalAlignment.Stretch;
 
+                    DataTable dataTable = new DataTable();
                     adapter.SelectCommand = sqlCommand;
                     adapter.Fill(dataTable);
+                    MainWindow.dTable.Clear();
+                    MainWindow.dTable.Columns.Clear();
+                    adapter.Fill(MainWindow.dTable);
 
                     dataGrid.ItemsSource = dataTable.DefaultView;
                     dataGrid.AutoGenerateColumns = true;
@@ -199,8 +203,10 @@ namespace EduPrac
                 {
                     adapter.SelectCommand = sqlCommand;
                     DataTable dataTable = new DataTable();
-
                     adapter.Fill(dataTable);
+                    MainWindow.dTable.Clear();
+                    MainWindow.dTable.Columns.Clear();
+                    adapter.Fill(MainWindow.dTable);
 
                     try
                     {
@@ -332,6 +338,9 @@ namespace EduPrac
                     DataTable dataTable = new DataTable();
 
                     adapter.Fill(dataTable);
+                    MainWindow.dTable.Clear();
+                    MainWindow.dTable.Columns.Clear();
+                    adapter.Fill(MainWindow.dTable);
                     try
                     {
                         for (int i = 0; i < dataTable.Rows.Count; i++)
@@ -370,6 +379,9 @@ namespace EduPrac
                     DataTable dataTable = new DataTable();
 
                     adapter.Fill(dataTable);
+                    MainWindow.dTable.Clear();
+                    MainWindow.dTable.Columns.Clear();
+                    adapter.Fill(MainWindow.dTable);
                     try
                     {
                         answer = (string)dataTable.Rows[0][0];
@@ -539,7 +551,11 @@ namespace EduPrac
                 {
                     adapter.SelectCommand = sqlCommand;
 
+                    DataTable dataTable = new DataTable();
                     adapter.Fill(dataTable);
+                    MainWindow.dTable.Clear();
+                    MainWindow.dTable.Columns.Clear();
+                    adapter.Fill(MainWindow.dTable);
                     try
                     {
                         countDay = dataTable.Rows.Count;
