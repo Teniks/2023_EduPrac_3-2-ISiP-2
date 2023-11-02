@@ -52,6 +52,8 @@ namespace EduPrac
             InitializeComponent();
 
             TableVisElementEdit();
+
+            BackUpDB.Content = "Резервное \n копирование БД";
         }
 
         private void ButtonLog_PreviewMouseUp(object sender, MouseButtonEventArgs e)
@@ -149,12 +151,12 @@ namespace EduPrac
                         }
                         break;
                     case "LogWork":
-                        if (!DataBase.checkIDisExists(DataGridTableArea, TableData[2][0], TableData[0][1], TableData[2][2], $"'{SecondTextBox.Text}'"))
+                        if (!DataBase.checkIDisExists(DataGridTableArea, TableData[2][0], TableData[0][1], TableData[2][2], $"{SecondTextBox.Text}"))
                         {
                             MessageBox.Show("Такое имя отсутствует в списках. \n\t Проверьте правильность написания и наличие в списках");
                             return;
                         }
-                        if (!DataBase.checkIDisExists(DataGridTableArea, TableData[4][0], TableData[0][3], TableData[4][1], $"'{ThirdTextBox.Text}'"))
+                        if (!DataBase.checkIDisExists(DataGridTableArea, TableData[4][0], TableData[0][3], TableData[4][1], $"{ThirdTextBox.Text}"))
                         {
                             MessageBox.Show("Такая площадка отсутствует в списках. \n\t Проверьте правильность написания и наличие в списках");
                             return;
@@ -192,17 +194,17 @@ namespace EduPrac
             }
             if (!AddorDel)
             {
-                if (nameTable == TableData[0][1])
+                if (nameTable == "Artists")
                 {
-                    if (DataBase.checkIDisExists(DataGridTableArea, TableData[2][1], TableData[0][1], TableData[1][2], FirstTextBox.Text))
+                    if (DataBase.checkIDisExists(DataGridTableArea, "IdRecordLog", "LogWork", "IdArtist", FirstTextBox.Text))
                     {
                         MessageBox.Show("Имя используется в другой записи. Таблица Журнала");
                         return;
                     }
                 }
-                if (nameTable == TableData[0][2])
+                if (nameTable == "ArtistCategory")
                 {
-                    if (DataBase.checkIDisExists(DataGridTableArea, TableData[2][1], TableData[0][2], TableData[1][2], FirstTextBox.Text))
+                    if (DataBase.checkIDisExists(DataGridTableArea, "IdArtist", "Artists", "IdCategory",  FirstTextBox.Text))
                     {
                         MessageBox.Show("Категория используется в другой записи. Таблица Артистов");
                         return;
@@ -241,12 +243,16 @@ namespace EduPrac
                 //Создаем лист
                 Excel._Worksheet exSheet = (Excel.Worksheet)exApp.ActiveSheet;
                 //Перебираем элементы и переносим в лист
+                for (int i = 0; i < Buffer.Columns.Count; i++)
+                {
+                    exApp.Cells[i + 1][1] = Buffer.Columns[i].ColumnName;
+                }
                 for (int j = 0; j < Buffer.Rows.Count; j++)
                 {
                     for (int i = 0; i < Buffer.Columns.Count; i++)
                     {
-                        exApp.Cells[i+1][j+1] = Buffer.Rows[j][i].ToString();
-                        exApp.Columns[i+1].AutoFit();
+                        exApp.Cells[i + 1][j + 2] = Buffer.Rows[j][i].ToString();
+                        exApp.Columns[i + 1].AutoFit();
                     }
                 }
 
@@ -561,7 +567,7 @@ namespace EduPrac
                 {
 
                     string attr = "FORMAT(DateGoingWork, 'yyyy.MM.dd')";
-                    DataBase.SearchInTable($"{DataBase.SearchID("IdArtist", "Artists", "FullNameArtist", SearchNameTextBox.Text.Trim())}", nameTable = "LogWork", "IdArtist", DataGridTableArea, 2, SearchDateTextBox.Text.Trim(), attr);
+                    DataBase.SearchInTable($"{DataBase.SearchID("IdArtist", "Artists", "FullNameArtist", $"'{SearchNameTextBox.Text.Trim()}'")}", nameTable = "LogWork", "IdArtist", DataGridTableArea, 2, SearchDateTextBox.Text.Trim(), attr);
                 }
             }
         }
@@ -583,6 +589,13 @@ namespace EduPrac
                 }
             }
             
+        }
+
+        private void BackUpDB_PreviewMouseUp(object sender, MouseButtonEventArgs e)
+        {
+            if (BackUpGrid.Visibility == Visibility.Collapsed)
+                BackUpGrid.Visibility = Visibility.Visible;
+            else BackUpGrid.Visibility = Visibility.Collapsed;
         }
 
         private void TableVisElementEdit()
@@ -822,6 +835,23 @@ namespace EduPrac
             }
             
             return query = $"INSERT INTO {nameTable}{Attributs} VALUES ({DataBase.newID(nameTable, idname)}, {valuesAttributs})";
+        }
+
+        private void BackupBtn_PreviewMouseUp(object sender, MouseButtonEventArgs e)
+        {
+            DataBase.BackUp();
+        }
+
+        private void RestoreBtn_PreviewMouseUp(object sender, MouseButtonEventArgs e)
+        {
+            OpenFileDialog openFile = new OpenFileDialog();
+            openFile.InitialDirectory = @"C:\Users\Public\Documents\";
+            openFile.Filter = "Backup (*.bak)|*bak|All files (*.*)|*.*";
+            if (openFile.ShowDialog() == true)
+            {
+                DataBase.Restore(openFile.FileName);
+            }
+            
         }
     }
 }

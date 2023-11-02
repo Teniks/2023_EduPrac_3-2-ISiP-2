@@ -105,7 +105,7 @@ namespace EduPrac
         public static bool checkIDisExistsDouble(in string nameTable, in string nameValue, in string value, in string nameValue2, in string value2 )
         {
             int counter = 0;
-            string querySQL = $"select * from {nameTable} where {nameValue} = {value}  and {nameValue2} = {value2}";
+            string querySQL = $"select * from {nameTable} where {nameValue} = N'{value}'  and {nameValue2} = N{value2}";
 
             DataBase localDB = new DataBase();
             SqlDataAdapter adapter = new SqlDataAdapter();
@@ -129,7 +129,7 @@ namespace EduPrac
             }
             catch
             {
-                MessageBox.Show("При проверке записи на наличие в базе данных возникла ошибка.");
+
             }
 
             localDB.closeConection();
@@ -147,7 +147,7 @@ namespace EduPrac
         public static bool checkIDisExists(in DataGrid dataGrid,in string nameid,in string nameTable,in string nameValue,in string value)
         {
             int counter = 0;
-            string querySQL = $"SELECT {nameid} FROM {nameTable} WHERE {nameValue} = N{value}";
+            string querySQL = $"SELECT {nameid} FROM {nameTable} WHERE {nameValue} = N'{value}'";
 
             DataBase localDB = new DataBase();
             SqlDataAdapter adapter = new SqlDataAdapter();
@@ -173,7 +173,7 @@ namespace EduPrac
             }
             catch
             {
-                MessageBox.Show("При проверке записи на наличие в базе данных возникла ошибка.");
+
             }
 
             localDB.closeConection();
@@ -572,15 +572,15 @@ namespace EduPrac
                                     }
                                     if (Convert.ToInt32((string)dataTable.Rows[i][0]) + 1 == Convert.ToInt32((string)dataTable.Rows[i + 1][0]))
                                     {
-                                        if (!answer.EndsWith("."))
-                                            answer += Convert.ToInt32((string)dataTable.Rows[i][0]) + ".";
-                                        else answer += ".";
+                                        if (!answer.EndsWith("-"))
+                                            answer += Convert.ToInt32((string)dataTable.Rows[i][0]) + "-";
+                                        else answer += "";
                                     }
                                 }
                                 else
                                 {
-                                    if (answer.EndsWith("."))
-                                        answer += "." + Convert.ToInt32((string)dataTable.Rows[i][0]) + " ";
+                                    if (answer.EndsWith("-"))
+                                        answer += "-" + Convert.ToInt32((string)dataTable.Rows[i][0]) + " ";
                                     else answer += " " + Convert.ToInt32((string)dataTable.Rows[i][0]);
                                 }
 
@@ -603,6 +603,31 @@ namespace EduPrac
             }catch { }
 
             return answer;
+        }
+
+        public static void BackUp()
+        {
+            try
+            {
+                string query = $@"DECLARE @db_Name nvarchar(max); DECLARE @backup_path nvarchar(max); set @db_Name = (select DB_NAME() AS [CURENT DATABASE]); set @backup_path = 'C:\Users\Public\Documents\LD.bak'; BACKUP DATABASE @db_Name TO DISK = @backup_path";
+                querySQL(query);
+                MessageBox.Show($"Путь: \n" + @"C:\Users\Public\Documents\LD.bak");
+            }
+            catch { }
+        }
+        public static void Restore(in string path)
+        {
+            try
+            {
+                string query = $@"DECLARE @backup_path nvarchar(max); SET @backup_path = '{path}'; RESTORE DATABASE LD.mdf FROM DISK @backup_path WITH NORECOVERY; RESTORE DATABASE LD.mdf WITH RECOVERY;";
+                querySQL(query);
+
+                MessageBox.Show("Восстановление завершено");
+            }
+            catch
+            {
+
+            }
         }
     }
 }
