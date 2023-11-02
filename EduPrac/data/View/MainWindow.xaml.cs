@@ -233,7 +233,7 @@ namespace EduPrac
 
             try
             {
-                DataTable Buffer = (DataTable)DataGridTableArea.ItemsSource;
+                DataTable Buffer = DataBase.dataTable;
                 //Создаем обьект приложения Excel
                 Excel.Application exApp = new Excel.Application();
                 //Создаем книгу

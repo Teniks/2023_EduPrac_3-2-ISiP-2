@@ -21,6 +21,7 @@ namespace EduPrac
         SqlConnection sqlConnection = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;
                                                           AttachDbFilename=C:\Users\Teniks_V\Documents\GitHub\2023_EduPrac_3-2-ISiP-2\EduPrac\data\Model\LD.mdf;
                                                           Integrated Security=True");
+        public static DataTable dataTable = new DataTable();
 
         public void openConection()
         {
@@ -71,7 +72,6 @@ namespace EduPrac
             {
                 DataBase localDB = new DataBase();
                 SqlDataAdapter adapter = new SqlDataAdapter();
-                DataTable dataTable = new DataTable();
 
                 localDB.openConection();
 
@@ -538,7 +538,6 @@ namespace EduPrac
                 using (SqlCommand sqlCommand = new SqlCommand(querySQL, localDB.GetSqlConection()))
                 {
                     adapter.SelectCommand = sqlCommand;
-                    DataTable dataTable = new DataTable();
 
                     adapter.Fill(dataTable);
                     try
