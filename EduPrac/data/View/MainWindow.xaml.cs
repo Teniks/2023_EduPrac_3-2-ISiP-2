@@ -237,21 +237,20 @@ namespace EduPrac
                 //Создаем обьект приложения Excel
                 Excel.Application exApp = new Excel.Application();
                 //Создаем книгу
-                Excel.Workbook Book = new Excel.Workbook();
+                exApp.Workbooks.Add();
                 //Создаем лист
-                Excel.Worksheets exSheet = (Excel.Worksheets)Book.ActiveSheet;
+                Excel._Worksheet exSheet = (Excel.Worksheet)exApp.ActiveSheet;
                 //Перебираем элементы и переносим в лист
                 for (int j = 0; j < Buffer.Rows.Count; j++)
                 {
                     for (int i = 0; i < Buffer.Columns.Count; i++)
                     {
-                        exApp.Cells[j][i] = Buffer.Rows[j][i].ToString();
+                        exApp.Cells[i+1][j+1] = Buffer.Rows[j][i].ToString();
+                        exApp.Columns[i+1].AutoFit();
                     }
                 }
 
-                exApp.Workbooks.Add(Book);
-
-                //Открытие приложения
+                //Открытие приложение
                 exApp.Visible = true;
 
                 //Высвобождение ресурсов
@@ -259,10 +258,11 @@ namespace EduPrac
                 Marshal.FinalReleaseComObject(exApp);
                 exSheet = null;
                 exApp = null;
+                //И в итоге у нас ничего не работает
             }
             catch
             {
-                MessageBox.Show("Возможно на вашем компьютере отсутствует Excel.");
+                MessageBox.Show("Возможно на вашем компьютере отсутствует Excel или его не удалось открыть.");
             }
 
         }
